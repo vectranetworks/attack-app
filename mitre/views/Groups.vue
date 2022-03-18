@@ -203,6 +203,10 @@ export default {
           }
         }
         console.log(groupDescriptionsData);
+
+        //Sort numerically
+        groupDescriptionsData.sort((a, b) => (a.tnum < b.tnum ? -1 : 1));
+
         return groupDescriptionsData;
       } else {
         return groupDescriptionsData;
@@ -279,6 +283,8 @@ export default {
           }
         }
       }
+      //Sort items alphabetically
+      items.sort((a, b) => (a.label < b.label ? -1 : 1));
       return items;
     },
   },

@@ -223,6 +223,8 @@ export default {
           }
         }
       }
+      //Sort items alphabetically
+      items.sort((a, b) => (a.label < b.label ? -1 : 1));
       return items;
     }, */
   },
