@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/quasar@2.5.5/dist/quasar.prod.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <!-- This is where the Vue App will run -->
+    <div id="q-app"></div>
+
+    <!-- Import a load of required files -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.5.5/dist/quasar.umd.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+    <script src="https://unpkg.com/axios"></script>
+
+    <!-- Initialise Vue stuff -->
+    <script>
+      // Define options for Vue3 Single File Component Loader
+      const options = {
+        moduleCache: {
+          vue: Vue,
+        },
+        getFile(url) {
+          return fetch(url).then((response) =>
+            response.ok ? response.text() : Promise.reject(response)
+          );
+        },
+        addStyle(styleStr) {
+          const style = document.createElement("style");
+          style.textContent = styleStr;
+          const ref = document.head.getElementsByTagName("style")[0] || null;
+          document.head.insertBefore(style, ref);
+        },
+      };
+      const { loadModule, version } = window["vue3-sfc-loader"];
+
+      //Create Vue App, load main component, App.vue. Set an initial template of just this new App component.
+      const app = Vue.createApp({
+        components: {
+          App: Vue.defineAsyncComponent(() => loadModule("./App.vue", options)),
+        },
+        template: `<App />`,
+      });
+
+      //Use Quasar for components.
+      app.use(Quasar, {
+        config: {
+          dark: "auto",
+        },
+      });
+
+      //Mount the Vue app to the q-app div
+      app.mount("#q-app");
+    </script>
+
+    <!-- Load Router to allow multiple pages -->
+    <script src="/router/router.js"></script>
+  </body>
+</html>

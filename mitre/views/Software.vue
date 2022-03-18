@@ -1,0 +1,285 @@
+<style>
+@import "css/mitre.css";
+</style>
+
+<template>
+  <div>
+    <h3>Malware & Tools</h3>
+    <div class="q-pa-md">
+      <div class="q-gutter-md">
+        <q-banner class="bg-primary text-white" v-if="store.selectedSoftware">
+          You have selected: <b>{{ store.selectedSoftware.value }}</b> who is
+          know by: <b>{{ store.selectedSoftware.name }}</b> in MITRE ATT&CK
+        </q-banner>
+        <q-select
+          filled
+          v-model="store.selectedSoftware"
+          @update:model-value="store.fetchSoftware(store.selectedSoftware.name)"
+          :options="software"
+          label="Malware or Tool Alias"
+        />
+        <div class="showempty" @click="this.showempty = !this.showempty">
+          {{ this.showempty ? "Hide" : "Show" }} Empty Values
+        </div>
+        <div class="showempty" @click="showtnumdsc = !showtnumdsc">
+          {{ showtnumdsc ? "Hide" : "Show" }} T-number descriptions
+        </div>
+        <div
+          class="showempty"
+          @click="showsoftwaredetections = !showsoftwaredetections"
+        >
+          {{ showsoftwaredetections ? "Hide" : "Show" }} Cognito Detection List
+        </div>
+      </div>
+      <div class="row">
+        <template v-if="store.threatSoftwareData.loaded">
+          <template
+            v-if="store.threatSoftwareData.loaded"
+            v-for="cat in Object.keys(store.threatSoftwareData.data)"
+          >
+            <table class="table">
+              <thead>
+                <tr>
+                  <th colspan="2">{{ cat }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template
+                  v-for="tnum in Object.keys(
+                    store.threatSoftwareData.data[cat]
+                  )"
+                >
+                  <tr
+                    v-if="
+                      store.threatSoftwareData.data[cat][tnum].detections
+                        .length || showempty
+                    "
+                  >
+                    <th
+                      :rowspan="
+                        store.threatSoftwareData.data[cat][tnum].detections
+                          .length + 1
+                      "
+                    >
+                      {{ tnum }}
+                    </th>
+                  </tr>
+                  <tr
+                    v-if="
+                      store.threatSoftwareData.data[cat][tnum].detections
+                        .length || showempty
+                    "
+                    v-for="det in store.threatSoftwareData.data[cat][tnum]
+                      .detections"
+                  >
+                    <td>
+                      {{ det }}
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </template>
+        </template>
+      </div>
+      <div class="row">
+        <template v-if="showtnumdsc">
+          <table class="table">
+            <thead>
+              <tr>
+                <th colspan="2">MITRE Technique Descriptions</th>
+              </tr>
+            </thead>
+            <template v-for="item in softwareDescriptions">
+              <tr>
+                <th>
+                  {{ item.tnum }}
+                </th>
+                <td>
+                  {{ item.description }}
+                </td>
+              </tr>
+            </template>
+          </table>
+        </template>
+      </div>
+      <template v-if="showsoftwaredetections">
+        <div class="row">
+          <div
+            class="showempty"
+            @click="showsoftwaredetectionsteps = !showsoftwaredetectionsteps"
+          >
+            {{ showsoftwaredetectionsteps ? "Hide" : "Show" }} Detection
+            Investigation Steps
+          </div>
+        </div>
+        <div class="row">
+          <table class="table">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  Cognito's Coverage of MITRE Techniques for
+                  {{ store.selectedSoftware.value }}
+                </th>
+              </tr>
+            </thead>
+            <template v-for="det in softwareDetections">
+              <tr>
+                <th>
+                  {{ det }}
+                </th>
+                <template v-if="showsoftwaredetectionsteps">
+                  <td>
+                    {{ det }}
+                  </td>
+                </template>
+              </tr>
+            </template>
+          </table>
+        </div>
+      </template>
+      <template v-if="store.threatSoftwareData.description">
+        <div class="row">
+          <h5>
+            <b>{{ store.selectedSoftware.value }}</b> description:
+          </h5>
+          <p>{{ store.threatSoftwareData.description }}</p>
+        </div>
+      </template>
+    </div>
+  </div>
+</template>
+
+<script>
+import store from "/store/software.mjs";
+import { ref } from "vue";
+export default {
+  setup() {
+    return {
+      store,
+      showempty: ref(true),
+      showtnumdsc: ref(false),
+      showsoftwaredetections: ref(false),
+    };
+  },
+
+  methods: {
+    getDetections: function (obj) {
+      // console.log('getDetections:' + obj.detections)
+      return obj.detections;
+    },
+
+    detCount: function (obj) {
+      // console.log("detCount:" + obj);
+      if (obj.detections.length >= 1) {
+        return obj.detections.length;
+      }
+      return 1;
+    },
+
+    tkeys: function (obj) {
+      return Object.keys(obj);
+    },
+  },
+
+  computed: {
+    softwareDescriptions: function () {
+      let softwareDescriptionsData = [];
+      if (store.threatSoftwareData.loaded) {
+        for (let cat of Object.keys(store.threatSoftwareData.data)) {
+          for (let tnum of Object.keys(store.threatSoftwareData.data[cat])) {
+            if (store.threatSoftwareData.data[cat][tnum].description) {
+              softwareDescriptionsData.push({
+                tnum: tnum,
+                description:
+                  store.threatSoftwareData.data[cat][tnum].description,
+              });
+            }
+          }
+        }
+        console.log(softwareDescriptionsData);
+        return softwareDescriptionsData;
+      } else {
+        return softwareDescriptionsData;
+      }
+    },
+
+    softwareDetections: function () {
+      const softwareDetectionData = new Set();
+      if (store.threatSoftwareData.loaded) {
+        for (let cat of Object.keys(store.threatSoftwareData.data)) {
+          for (let tnum of Object.keys(store.threatSoftwareData.data[cat])) {
+            if (store.threatSoftwareData.data[cat][tnum].detections) {
+              store.threatSoftwareData.data[cat][tnum].detections.forEach(
+                (element) => softwareDetectionData.add(element)
+              );
+            }
+          }
+        }
+        // console.log(softwareDescriptionsData);
+        return softwareDetectionData;
+      } else {
+        return softwareDetectionData;
+      }
+    },
+
+    /* computedColumns: function () {
+      let columns = [];
+      const columnNames = Object.keys(store.threatSoftwareData.data);
+
+      columns.push({
+        name: "name",
+        label: "Techniques",
+        field: (row) => row.name,
+        format: (val) => `${val}`,
+        align: "center",
+        sortable: true,
+      });
+
+      for (let colname of columnNames) {
+        columns.push({
+          name: colname,
+          label: colname,
+          field: colname,
+          align: "center",
+          sortable: true,
+        });
+      }
+      console.log(columns);
+      return columns;
+    }, */
+
+    columnNames: function () {
+      let names = new Set();
+      names = Object.keys(store.threatSoftwareData.data);
+
+      return names;
+    },
+
+    software: function () {
+      let items = [];
+      if (store.softwareData.loaded) {
+        for (let item of store.softwareData.data) {
+          if (item.aliases) {
+            // console.log("Loaded items.aliases");
+            for (let alias of item.aliases) {
+              if (alias) {
+                items.push({
+                  label: alias,
+                  value: alias,
+                  name: item.name,
+                });
+              }
+            }
+          }
+        }
+      }
+      return items;
+    },
+  },
+
+  mounted: function () {
+    store.getSoftwareList();
+  },
+};
+</script>

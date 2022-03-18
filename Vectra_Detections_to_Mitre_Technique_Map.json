@@ -1,0 +1,577 @@
+{
+  "Detect for Network": {
+    "Command & Control": {
+      "External Remote Access": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1125 Video Capture",
+        "T1090 Proxy",
+        "T1113 Screen Capture",
+        "T1010 Application Window Discovery",
+        "T1037 Boot or Logon Initialization Scripts",
+        "T1111 Two-Factor Authentication Interception",
+        "T1572 Protocol Tunneling",
+        "T1573 Encrypted Channel",
+        "T1048 Exfiltration Over Alternative Protocol",
+        "T1204 User Execution",
+        "T1056 Input Capture",
+        "T1001 Data Obfuscation",
+        "T1571 Non-Standard Port",
+        "T1059 Command and Scripting Interpreter",
+        "T1518 Software Discovery",
+        "T1176 Browser Extensions",
+        "T1123 Audio Capture",
+        "T1008 Fallback Channels",
+        "T1219 Remote Access Software",
+        "T1105 Ingress Tool Transfer",
+        "T1133 External Remote Services",
+        "T1095 Non-Application Layer Protocol",
+        "T1132 Data Encoding"
+      ],
+      "Hidden DNS Tunnel": [
+        "T1005 Data from Local System",
+        "T1071 Application Layer Protocol",
+        "T1010 Application Window Discovery",
+        "T1037 Boot or Logon Initialization Scripts",
+        "T1572 Protocol Tunneling",
+        "T1573 Encrypted Channel",
+        "T1056 Input Capture",
+        "T1001 Data Obfuscation",
+        "T1059 Command and Scripting Interpreter",
+        "T1008 Fallback Channels",
+        "T1105 Ingress Tool Transfer",
+        "T1132 Data Encoding"
+      ],
+      "Hidden HTTP Tunnel": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1185 Man in the Browser",
+        "T1125 Video Capture",
+        "T1113 Screen Capture",
+        "T1010 Application Window Discovery",
+        "T1037 Boot or Logon Initialization Scripts",
+        "T1111 Two-Factor Authentication Interception",
+        "T1572 Protocol Tunneling",
+        "T1204 User Execution",
+        "T1056 Input Capture",
+        "T1001 Data Obfuscation",
+        "T1571 Non-Standard Port",
+        "T1059 Command and Scripting Interpreter",
+        "T1518 Software Discovery",
+        "T1176 Browser Extensions",
+        "T1123 Audio Capture",
+        "T1008 Fallback Channels",
+        "T1105 Ingress Tool Transfer",
+        "T1132 Data Encoding"
+      ],
+      "Hidden HTTPS Tunnel": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1185 Man in the Browser",
+        "T1125 Video Capture",
+        "T1113 Screen Capture",
+        "T1010 Application Window Discovery",
+        "T1037 Boot or Logon Initialization Scripts",
+        "T1111 Two-Factor Authentication Interception",
+        "T1572 Protocol Tunneling",
+        "T1573 Encrypted Channel",
+        "T1204 User Execution",
+        "T1056 Input Capture",
+        "T1001 Data Obfuscation",
+        "T1571 Non-Standard Port",
+        "T1059 Command and Scripting Interpreter",
+        "T1518 Software Discovery",
+        "T1176 Browser Extensions",
+        "T1123 Audio Capture",
+        "T1008 Fallback Channels",
+        "T1132 Data Encoding"
+      ],
+      "Malware Update": [
+        "T1105 Ingress Tool Transfer"
+      ],
+      "Multi-home Fronted Tunnel": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1125 Video Capture",
+        "T1113 Screen Capture",
+        "T1010 Application Window Discovery",
+        "T1037 Boot or Logon Initialization Scripts",
+        "T1111 Two-Factor Authentication Interception",
+        "T1572 Protocol Tunneling",
+        "T1573 Encrypted Channel",
+        "T1204 User Execution",
+        "T1056 Input Capture",
+        "T1001 Data Obfuscation",
+        "T1571 Non-Standard Port",
+        "T1059 Command and Scripting Interpreter",
+        "T1518 Software Discovery",
+        "T1176 Browser Extensions",
+        "T1123 Audio Capture",
+        "T1008 Fallback Channels",
+        "T1132 Data Encoding"
+      ],
+      "Peer-To-Peer": [
+        "T1090 Proxy"
+      ],
+      "Stealth HTTP Post": [
+        "T1071 Application Layer Protocol"
+      ],
+      "Suspect Domain Activity": [
+        "T1568 Dynamic Resolution"
+      ],
+      "Suspicious HTTP": [
+        "T1071 Application Layer Protocol"
+      ],
+      "Suspicious Relay": [
+        "T1090 Proxy",
+        "T1104 Multi-Stage Channels"
+      ],
+      "TOR Activity": [
+        "T1090 Proxy"
+      ],
+      "Threat Intelligence Match": [],
+      "Vectra Threat Intelligence Match": [
+        "T1008 Fallback Channels",
+        "T1041 Exfiltration Over C2 Channel",
+        "T1048 Exfiltration Over Alternative Protocol",
+        "T1059 Command and Scripting Interpreter",
+        "T1071 Application Layer Protocol",
+        "T1095 Non-Application Layer Protocol",
+        "T1105 Ingress Tool Transfer",
+        "T1132 Data Encoding",
+        "T1189 Drive-by Compromise",
+        "T1219 Remote Access Software",
+        "T1571 Non-Standard Port",
+        "T1573 Encrypted Channel"
+      ]
+    },
+    "Botnet Activity": {
+      "BruteForce": [
+        "T1110 Brute Force"
+      ],
+      "Cryptocurrency Mining": [
+        "T1496 Resource Hijacking"
+      ],
+      "Outbound DoS": [
+        "T1498 Network Denial of Service"
+      ],
+      "Outbound Port Sweep": [
+        "T1018 Remote System Discovery"
+      ]
+    },
+    "Reconnaissance": {
+      "File Share Enumeration": [
+        "T1039 Data from Network Shared Drive",
+        "T1119 Automated Collection",
+        "T1135 Network Share Discovery"
+      ],
+      "Internal Darknet Scan": [
+        "T1082 System Information Discovery",
+        "T1018 Remote System Discovery",
+        "T1072 Software Deployment Tools",
+        "T1046 Network Service Scanning",
+        "T1016 System Network Configuration Discovery"
+      ],
+      "Kerberos Account Scan": [
+        "T1087 Account Discovery"
+      ],
+      "Kerberos Brute-Sweep": [
+        "T1110 Brute Force"
+      ],
+      "RDP Recon": [
+        "T1033 System Owner/User Discovery",
+        "T1018 Remote System Discovery"
+      ],
+      "RPC Recon": [
+        "T1082 System Information Discovery",
+        "T1201 Password Policy Discovery",
+        "T1087 Account Discovery",
+        "T1124 System Time Discovery",
+        "T1049 System Network Connections Discovery",
+        "T1007 System Service Discovery",
+        "T1057 Process Discovery",
+        "T1069 Permission Groups Discovery",
+        "T1033 System Owner/User Discovery",
+        "T1135 Network Share Discovery"
+      ],
+      "RPC Targeted Recon": [
+        "T1007 System Service Discovery",
+        "T1082 System Information Discovery",
+        "T1124 System Time Discovery",
+        "T1077 Windows Admin Shares",
+        "T1049 System Network Connections Discovery",
+        "T1057 Process Discovery",
+        "T1069 Permission Groups Discovery",
+        "T1087 Account Discovery",
+        "T1135 Network Share Discovery",
+        "T1201 Password Policy Discovery"
+      ],
+      "SMB Account Scan": [
+        "T1087 Account Discovery"
+      ],
+      "Suspicious LDAP Query": [
+        "T1087 Account Discovery",
+        "T1018 Remote System Discovery",
+        "T1482 Domain Trust Discovery"
+      ],
+      "Suspicious Port Scan": [
+        "T1082 System Information Discovery",
+        "T1018 Remote System Discovery",
+        "T1072 Third Party Software",
+        "T1046 Network Service Scanning",
+        "T1016 System Network Configuration Discovery"
+      ],
+      "Suspicious Port Sweep": [
+        "T1082 System Information Discovery",
+        "T1018 Remote System Discovery",
+        "T1072 Third Party Software",
+        "T1046 Network Service Scanning",
+        "T1016 System Network Configuration Discovery"
+      ]
+    },
+    "Lateral Movement": {
+      "Automated Replication": [
+        "T1072 Software Deployment Tools",
+        "T1210 Exploitation of Remote Services"
+      ],
+      "Brute-Force": [
+        "T1110 Brute Force"
+      ],
+      "Kerberos Brute-Force": [
+        "T1110 Brute Force"
+      ],
+      "Kerberos Server Access": [
+        "T1207 Rogue Domain Controller"
+      ],
+      "Privilege Anomaly: Unusual Account on Host": [
+        "T1078 Valid Accounts",
+        "T1098 Account Manipulation",
+        "T1552 Unsecured Credentials",
+        "T1555 Credentials from Password Stores",
+        "T1040 Network Sniffing",
+        "T1033 System Owner/User Discovery",
+        "T1212 Exploitation for Credential Access",
+        "T1484 Group Policy Modification",
+        "T1556 Modify Authentication Process",
+        "T1558 Steal or Forge Kerberos Tickets",
+        "T1550 Use Alternate Authentication Material",
+        "T1539 Steal Web Session Cookie",
+        "T1003 OS Credential Dumping Dumping",
+        "T1136 Create Account"
+      ],
+      "Privilege Anomaly: Unusual Host": [
+        "T1078 Valid Accounts",
+        "T1098 Account Manipulation",
+        "T1552 Unsecured Credentials",
+        "T1555 Credentials from Password Stores",
+        "T1040 Network Sniffing",
+        "T1033 System Owner/User Discovery",
+        "T1212 Exploitation for Credential Access",
+        "T1484 Group Policy Modification",
+        "T1556 Modify Authentication Process",
+        "T1558 Steal or Forge Kerberos Tickets",
+        "T1550 Use Alternate Authentication Material",
+        "T1539 Steal Web Session Cookie",
+        "T1003 OS Credential Dumping Dumping",
+        "T1136 Create Account"
+      ],
+      "Privilege Anomaly: Unusual Service": [
+        "T1078 Valid Accounts",
+        "T1098 Account Manipulation",
+        "T1552 Unsecured Credentials",
+        "T1555 Credentials from Password Stores",
+        "T1040 Network Sniffing",
+        "T1033 System Owner/User Discovery",
+        "T1212 Exploitation for Credential Access",
+        "T1484 Group Policy Modification",
+        "T1556 Modify Authentication Process",
+        "T1558 Steal or Forge Kerberos Tickets",
+        "T1550 Use Alternate Authentication Material",
+        "T1539 Steal Web Session Cookie",
+        "T1003 OS Credential Dumping Dumping",
+        "T1136 Create Account"
+      ],
+      "Privilege Anomaly: Unusual Service - Insider": [
+        "T1078 Valid Accounts",
+        "T1098 Account Manipulation",
+        "T1552 Unsecured Credentials",
+        "T1555 Credentials from Password Stores",
+        "T1040 Network Sniffing",
+        "T1033 System Owner/User Discovery",
+        "T1212 Exploitation for Credential Access",
+        "T1484 Group Policy Modification",
+        "T1556 Modify Authentication Process",
+        "T1558 Steal or Forge Kerberos Tickets",
+        "T1550 Use Alternate Authentication Material",
+        "T1539 Steal Web Session Cookie",
+        "T1003 OS Credential Dumping Dumping",
+        "T1136 Create Account"
+      ],
+      "Privilege Anomaly: Unusual Service from Host": [
+        "T1078 Valid Accounts",
+        "T1098 Account Manipulation",
+        "T1552 Unsecured Credentials",
+        "T1555 Credentials from Password Stores",
+        "T1040 Network Sniffing",
+        "T1033 System Owner/User Discovery",
+        "T1212 Exploitation for Credential Access",
+        "T1484 Group Policy Modification",
+        "T1556 Modify Authentication Process",
+        "T1558 Steal or Forge Kerberos Tickets",
+        "T1550 Use Alternate Authentication Material",
+        "T1539 Steal Web Session Cookie",
+        "T1003 OS Credential Dumping Dumping",
+        "T1136 Create Account"
+      ],
+      "Privilege Anomaly: Unusual Trio": [
+        "T1078 Valid Accounts",
+        "T1098 Account Manipulation",
+        "T1552 Unsecured Credentials",
+        "T1555 Credentials from Password Stores",
+        "T1040 Network Sniffing",
+        "T1033 System Owner/User Discovery",
+        "T1212 Exploitation for Credential Access",
+        "T1484 Group Policy Modification",
+        "T1556 Modify Authentication Process",
+        "T1558 Steal or Forge Kerberos Tickets",
+        "T1550 Use Alternate Authentication Material",
+        "T1539 Steal Web Session Cookie",
+        "T1003 OS Credential Dumping Dumping",
+        "T1136 Create Account"
+      ],
+      "Ransomware File Activity": [
+        "T1486 Data Encrypted for Impact"
+      ],
+      "SMB Brute-Force": [
+        "T1110 Brute Force"
+      ],
+      "Shell Knocker Client": [
+        "T1205 Traffic Signaling"
+      ],
+      "Shell Knocker Server": [
+        "T1205 Traffic Signaling"
+      ],
+      "SQL Injection Activity": [
+        "T1190 Exploit Public Facing Application"
+      ],
+      "Stage Loader": [
+        "T1210 Exploitation of Remote Services",
+        "T1570 Lateral Tool Transfer"
+      ],
+      "Suspicious Admin": [
+        "T1003 OS Credential Dumping",
+        "T1078 Valid Accounts",
+        "T1212 Exploitation For Credential Access",
+        "T1552 Unsecure Credentials",
+        "T1555 Credentials From Password Stores",
+        "T1021 Remote Services",
+        "T1563 Remote Service Session Hijacking"
+      ],
+      "Suspicious Remote Desktop": [
+        "T1003 OS Credential Dumping",
+        "T1078 Valid Accounts",
+        "T1212 Exploitation For Credential Access",
+        "T1552 Unsecure Credentials",
+        "T1555 Credentials From Password Stores",
+        "T1021 Remote Services"
+      ],
+      "Suspicious Remote Execution": [
+        "T1569 System Services",
+        "T1021 Remote Services",
+        "T1047 Windows Management Instrumentation",
+        "T1053 Scheduled Task/Job",
+        "T1078 Valid Accounts",
+        "T1570 Lateral Tool Transfer",
+        "T1571 Non-Standard Port",
+        "T1572 Protocol Tunneling"
+      ],
+      "Threat Intelligence Match": []
+    },
+    "Exfiltration": {
+      "Data Smuggler": [
+        "T1041 Exfiltration Over C2 Channel",
+        "T1213 Data From Information Repositories",
+        "T1560 Archive Collected Data",
+        "T1074 Data Staged",
+        "T1048 Exfiltration Over Alternative Protocol",
+        "T1020 Automated Exfiltration",
+        "T1030 Data Transfer Size Limits",
+        "T1567 Exfiltration Over Web Service"
+      ],
+      "Hidden DNS Tunnel": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1125 Video Capture",
+        "T1113 Screen Capture",
+        "T1572 Protocol Tunneling",
+        "T1123 Audio Capture",
+        "T1041 Exfiltration Over C2 Channel"
+      ],
+      "Hidden HTTP Tunnel": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1125 Video Capture",
+        "T1113 Screen Capture",
+        "T1572 Protocol Tunneling",
+        "T1123 Audio Capture",
+        "T1041 Exfiltration Over C2 Channel"
+      ],
+      "Hidden HTTPS Tunnel": [
+        "T1005 Data from Local System",
+        "T1115 Clipboard Data",
+        "T1071 Application Layer Protocol",
+        "T1125 Video Capture",
+        "T1113 Screen Capture",
+        "T1572 Protocol Tunneling",
+        "T1123 Audio Capture",
+        "T1041 Exfiltration Over C2 Channel"
+      ],
+      "Smash and Grab": [
+        "T1041 Exfiltration Over C2 Channel",
+        "T1213 Data From Information Repositories",
+        "T1560 Archive Collected Data",
+        "T1029 Scheduled Transfer",
+        "T1119 Automated Collection",
+        "T1048 Exfiltration Over Alternative Protocol",
+        "T1020 Automated Exfiltration",
+        "T1030 Data Transfer Size Limits",
+        "T1567 Exfiltration Over Web Service"
+      ],
+      "Threat Intelligence Match": []
+    }
+  },
+  "Detect for O365": {
+    "Command & Control": {
+      "O365 Admin Account Creation": [
+        "T1528 Steal Application Access Token",
+        "T1550 Use Alternate Authentication Material"
+      ],
+      "O365 Login Attempt to Disabled Account": [
+        "T1078 Valid Accounts"
+      ],
+      "O365 Power Automate HTTP Flow Creation": [
+        "T1041 Exfiltration Over C2 Channel",
+        "T1008 Fallback Channels",
+        "T1105 Ingress Tool Transfer",
+        "T1059 Command and Scripting Interpreter",
+        "T1020 Automated Exfiltration"
+      ],
+      "O365 Redundant Access Creation": [
+        "T1098 Account Manipulation"
+      ],
+      "O365 Suspicious Application Permissions": [
+        "T1550 Use Alternate Authentication Material",
+        "T1528 Steal Application Access Token"
+      ],
+      "O365 Suspicious Power Automate Flow Creation": [
+        "T1041 Exfiltration Over C2 Channel",
+        "T1008 Fallback Channels",
+        "T1105 Ingress Tool Transfer",
+        "T1059 Command and Scripting Interpreter",
+        "T1020 Automated Exfiltration"
+      ],
+      "O365 Suspicious Sign-on Activity": [
+        "T1078 Valid Accounts"
+      ],
+      "O365 TOR Activity": [
+        "T1090 Proxy"
+      ]
+    },
+    "Reconnaissance": {
+      "O365 Suspicious Compliance Search": [
+        "T1114 Email Collection"
+      ],
+      "O365 Unusual eDiscovery Search": [
+        "T1119 Automated Collection",
+        "T1213 Data from Information Repositories",
+        "T1083 File and Directory Discovery"
+      ]
+    },
+    "Lateral Movement": {
+      "O365 Account Brute-Force": [
+        "T1110 Brute Force"
+      ],
+      "O365 Account Manipulation": [
+        "T1098 Account Manipulation"
+      ],
+      "O365 Attacker Tool: Ruler": [
+        "T1114 Email Collection",
+        "T1137 Office Application Startup"
+      ],
+      "O365 Change to Trusted IP Configuration": [
+        "T1562 Impair Defenses"
+      ],
+      "O365 Disabling of Security Tools": [
+        "T1562 Impair Defenses"
+      ],
+      "O365 DLL Hijacking Activity": [
+        "T1574 Hijack Execution Flow"
+      ],
+      "O365 External Teams Access": [
+        "T1213 Data from Information Repositories"
+      ],
+      "O365 Internal Spearphising": [
+        "T1534 Internal Spearphishing"
+      ],
+      "O365 Log Disabling Attempt": [
+        "T1562 Impair Defenses"
+      ],
+      "O365 Malware Stage: Upload": [
+        "T1203 Exploitation for Client Execution"
+      ],
+      "O365 MFA Disabled": [
+        "T1562 Impair Defenses"
+      ],
+      "O365 Newly Created Admin Account": [
+        "T1136 Create Account"
+      ],
+      "O365 Ransomware": [
+        "T1486 Data Encrypted for Impact"
+      ],
+      "O365 Risky Exchange Operation": [
+        "T1484 Group Policy Modification",
+        "T1098 Account Manipulation"
+      ],
+      "O365 Suspicious Azure AD Operation": [
+        "T1078 Valid Accounts"
+      ],
+      "O365 Suspicious SharePoint Operation": [
+        "T1078 Valid Accounts",
+        "T1213 Data from Information Repositories"
+      ],
+      "O365 Suspicious Teams Application": [
+        "T1550 Use Alternate Authentication Material",
+        "T1528 Steal Application Access Token"
+      ],
+      "O365 Unusual Scripting Engine Usage": [
+        "T1059 Command and Scripting Interpreter"
+      ]
+    },
+    "Exfiltration": {
+      "O365 eDiscovery Exfile": [
+        "T1048 Exfiltration Over Alternative Protocol"
+      ],
+      "O365 Exfiltration Before Termination": [
+        "T1213 Data from Information Repositories"
+      ],
+      "O365 Suspicious Download Activity": [
+        "T1567 Exfiltration Over Web Service"
+      ],
+      "O365 Suspicious Exchange Transport Rule": [
+        "T1114 Email Collection"
+      ],
+      "O365 Suspicious Mail Forwarding": [
+        "T1114 Email Collection"
+      ],
+      "O365 Suspicious Sharing Activity": [
+        "T1213 Data from Information Repositories"
+      ]
+    }
+  }
+}
