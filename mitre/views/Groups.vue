@@ -13,9 +13,13 @@
         </q-banner>
         <q-select
           filled
+          use-input
+          clearable
+          input-debounce="0"
           v-model="store.selectedGroup"
-          @update:model-value="store.fetchThreatGroup(store.selectedGroup.name)"
-          :options="groups"
+          @update:model-value="store.fetchThreatGroup(store.selectedGroup)"
+          :options="options"
+          @filter="filterFn"
           label="Threat Group Alias"
         />
         <div class="showempty" @click="showempty = !showempty">
@@ -35,7 +39,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" v-if="store.selectedGroup">
         <template v-if="store.threatGroupData.loaded">
           <template
             v-if="store.threatGroupData.loaded"
@@ -84,7 +88,7 @@
           </template>
         </template>
       </div>
-      <div class="row">
+      <div class="row" v-if="store.selectedGroup">
         <template v-if="showtnumdescriptions">
           <table class="table">
             <thead>
@@ -108,7 +112,7 @@
           </table>
         </template>
       </div>
-      <template v-if="showgroupdetections">
+      <template v-if="showgroupdetections && store.selectedGroup">
         <div class="row">
           <div
             class="showempty"
@@ -143,7 +147,7 @@
           </table>
         </div>
       </template>
-      <template v-if="store.threatGroupData.description">
+      <template v-if="store.selectedGroup && store.threatGroupData.description">
         <div class="row">
           <h5>
             <b>{{ store.selectedGroup.value }}</b> description:
@@ -166,10 +170,29 @@ export default {
       showtnumdescriptions: ref(false),
       showgroupdetections: ref(false),
       showgroupdetectionsteps: ref(false),
+      options: ref([]),
     };
   },
 
   methods: {
+    filterFn: function (val, update) {
+      if (val === "") {
+        update(() => {
+          this.options = this.groups;
+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        });
+        return;
+      }
+
+      update(() => {
+        const needle = val.toLowerCase();
+        this.options = this.groups.filter(
+          (v) => v.label.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
     getDetections: function (obj) {
       // console.log('getDetections:' + obj.detections)
       return obj.detections;
