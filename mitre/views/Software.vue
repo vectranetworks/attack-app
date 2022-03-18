@@ -123,7 +123,7 @@
               <tr>
                 <th colspan="2">
                   Cognito's Coverage of MITRE Techniques for
-                  {{ store.selectedSoftware.value }}
+                  {{ store.selectedSoftware.name }}
                 </th>
               </tr>
             </thead>
@@ -147,9 +147,12 @@
       >
         <div class="row">
           <h5>
-            <b>{{ store.selectedSoftware.label }}</b> description:
+            <b>{{ store.selectedSoftware.name }}</b> description:
           </h5>
-          <p>{{ store.threatSoftwareData.description }}</p>
+          <p>
+            <!-- {{ store.threatSoftwareData.description }} -->
+            <div v-html="markdown(store.threatSoftwareData.description)"></div>
+          </p>
         </div>
       </template>
     </div>
@@ -206,6 +209,13 @@ export default {
     tkeys: function (obj) {
       return Object.keys(obj);
     },
+
+    markdown: function (input) {
+      if (input) {
+        console.log(`${marked.parse(input)}`);
+        return `${marked.parse(input)}`;
+      } else return null;
+    },
   },
 
   computed: {
@@ -223,7 +233,7 @@ export default {
             }
           }
         }
-        console.log(softwareDescriptionsData);
+        // console.log(softwareDescriptionsData);
         return softwareDescriptionsData;
       } else {
         return softwareDescriptionsData;
@@ -278,6 +288,7 @@ export default {
       items.sort((a, b) => (a.label < b.label ? -1 : 1));
       return items;
     },
+
   },
 
   mounted: function () {

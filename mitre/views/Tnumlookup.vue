@@ -19,10 +19,15 @@
       <div class="row" v-if="store.tnumData.description">
         <template v-if="store.tnumData.description">
           <div class="col">
-            Description of technique <b>{{ store.tnumData.name }}</b> ({{
-              store.tnumData.tnum
-            }}):
-            <p>{{ store.tnumData.description }}</p>
+            <h4>
+              Description of technique <b>{{ store.tnumData.name }}</b> ({{
+                store.tnumData.tnum
+              }}):
+            </h4>
+            <p>
+              <!-- {{ store.tnumData.description }} -->
+              <div v-html="markdown(store.tnumData.description)"></div>
+            </p>
           </div>
         </template>
       </div>
@@ -43,7 +48,8 @@
                     {{ group.name }}
                   </th>
                   <td>
-                    {{ group.description }}
+                    <!-- {{ group.description }} -->
+                    <div v-html="markdown(group.description)"></div>
                   </td>
                 </tr>
               </template>
@@ -68,7 +74,8 @@
                     {{ software.name }}
                   </th>
                   <td>
-                    {{ software.description }}
+                    <!-- {{ software.description }} -->
+                    <div v-html="markdown(software.description)"></div>
                   </td>
                 </tr>
               </template>
@@ -113,7 +120,14 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    markdown: function (input) {
+      if (input) {
+        console.log(`${marked.parse(input)}`);
+        return `${marked.parse(input)}`;
+      } else return null;
+    },
+  },
 
   computed: {},
 };

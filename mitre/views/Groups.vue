@@ -152,7 +152,12 @@
           <h5>
             <b>{{ store.selectedGroup.value }}</b> description:
           </h5>
-          <p>{{ store.threatGroupData.description }}</p>
+        </div>
+        <div class="row">
+        <p>
+            <!-- {{ store.threatGroupData.description }}</p> -->
+          <div v-html="markdown(store.threatGroupData.description)"></div>
+          </p>
         </div>
       </template>
     </div>
@@ -162,6 +167,7 @@
 <script>
 import store from "store/groups.mjs";
 import { ref } from "vue";
+
 export default {
   setup() {
     return {
@@ -193,6 +199,7 @@ export default {
         );
       });
     },
+
     getDetections: function (obj) {
       // console.log('getDetections:' + obj.detections)
       return obj.detections;
@@ -208,6 +215,13 @@ export default {
 
     tkeys: function (obj) {
       return Object.keys(obj);
+    },
+
+    markdown: function (input) {
+      if (input) {
+        console.log(`${marked.parse(input)}`);
+        return `${marked.parse(input)}`;
+      } else return null;
     },
   },
 
