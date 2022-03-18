@@ -48,10 +48,10 @@ module.exports = reactive({
       });
       if (fetchData.data) {
         // Retrieve description, and then delete as it should not be a key
-        console.log(fetchData.data.description);
+        // console.log(fetchData.data.description);
         this.softwareDescription = fetchData.data.description;
         delete fetchData.data.description;
-        console.log(this.softwareDescription);
+        // console.log(this.softwareDescription);
 
         // Delete name property as currently not used
         // delete fetchData.data.name;
