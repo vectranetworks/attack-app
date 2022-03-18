@@ -29,7 +29,7 @@ import Navigation from "./components/Navigation.vue";
 
 export default {
   setup() {
-    const leftDrawerOpen = ref(false);
+    const leftDrawerOpen = ref(true);
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {

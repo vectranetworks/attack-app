@@ -114,13 +114,13 @@
       </div>
       <template v-if="showgroupdetections && store.selectedGroup">
         <div class="row">
-          <div
+          <!-- <div
             class="showempty"
             @click="showgroupdetectionsteps = !showgroupdetectionsteps"
           >
             {{ showgroupdetectionsteps ? "Hide" : "Show" }} Detection
             Investigation Steps
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <table class="table">
@@ -254,39 +254,6 @@ export default {
         return groupDetectionData;
       }
     },
-
-    /* computedColumns: function () {
-      let columns = [];
-      const columnNames = Object.keys(store.threatGroupData.data);
-
-      columns.push({
-        name: "name",
-        label: "Techniques",
-        field: (row) => row.name,
-        format: (val) => `${val}`,
-        align: "center",
-        sortable: true,
-      });
-
-      for (let colname of columnNames) {
-        columns.push({
-          name: colname,
-          label: colname,
-          field: colname,
-          align: "center",
-          sortable: true,
-        });
-      }
-      console.log(columns);
-      return columns;
-    }, */
-
-    /* columnNames: function () {
-      let names = new Set();
-      names = Object.keys(store.threatGroupData.data);
-
-      return names;
-    }, */
 
     groups: function () {
       let items = [];

@@ -13,9 +13,13 @@
         </q-banner>
         <q-select
           filled
+          use-input
+          clearable
+          input-debounce="0"
           v-model="store.selectedSoftware"
           @update:model-value="store.fetchSoftware(store.selectedSoftware.name)"
-          :options="software"
+          :options="options"
+          @filter="filterFn"
           label="Malware or Tool Alias"
         />
         <div class="showempty" @click="this.showempty = !this.showempty">
@@ -32,7 +36,7 @@
         </div>
       </div>
       <div class="row">
-        <template v-if="store.threatSoftwareData.loaded">
+        <template v-if="store.selectedSoftware">
           <template
             v-if="store.threatSoftwareData.loaded"
             v-for="cat in Object.keys(store.threatSoftwareData.data)"
@@ -82,7 +86,7 @@
           </template>
         </template>
       </div>
-      <div class="row">
+      <div class="row" v-if="store.selectedSoftware">
         <template v-if="showtnumdsc">
           <table class="table">
             <thead>
@@ -103,15 +107,15 @@
           </table>
         </template>
       </div>
-      <template v-if="showsoftwaredetections">
+      <template v-if="showsoftwaredetections && store.selectedSoftware">
         <div class="row">
-          <div
+          <!-- <div
             class="showempty"
             @click="showsoftwaredetectionsteps = !showsoftwaredetectionsteps"
           >
             {{ showsoftwaredetectionsteps ? "Hide" : "Show" }} Detection
             Investigation Steps
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <table class="table">
@@ -138,10 +142,12 @@
           </table>
         </div>
       </template>
-      <template v-if="store.threatSoftwareData.description">
+      <template
+        v-if="store.selectedSoftware && store.threatSoftwareData.description"
+      >
         <div class="row">
           <h5>
-            <b>{{ store.selectedSoftware.value }}</b> description:
+            <b>{{ store.selectedSoftware.label }}</b> description:
           </h5>
           <p>{{ store.threatSoftwareData.description }}</p>
         </div>
@@ -160,10 +166,30 @@ export default {
       showempty: ref(true),
       showtnumdsc: ref(false),
       showsoftwaredetections: ref(false),
+      options: ref([]),
     };
   },
 
   methods: {
+    filterFn: function (val, update) {
+      if (val === "") {
+        update(() => {
+          this.options = this.software;
+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        });
+        return;
+      }
+
+      update(() => {
+        const needle = val.toLowerCase();
+        this.options = this.software.filter(
+          (v) => v.label.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+
     getDetections: function (obj) {
       // console.log('getDetections:' + obj.detections)
       return obj.detections;
@@ -222,32 +248,6 @@ export default {
         return softwareDetectionData;
       }
     },
-
-    /* computedColumns: function () {
-      let columns = [];
-      const columnNames = Object.keys(store.threatSoftwareData.data);
-
-      columns.push({
-        name: "name",
-        label: "Techniques",
-        field: (row) => row.name,
-        format: (val) => `${val}`,
-        align: "center",
-        sortable: true,
-      });
-
-      for (let colname of columnNames) {
-        columns.push({
-          name: colname,
-          label: colname,
-          field: colname,
-          align: "center",
-          sortable: true,
-        });
-      }
-      console.log(columns);
-      return columns;
-    }, */
 
     columnNames: function () {
       let names = new Set();
