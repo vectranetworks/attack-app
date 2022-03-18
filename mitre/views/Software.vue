@@ -149,6 +149,8 @@
           <h5>
             <b>{{ store.selectedSoftware.name }}</b> description:
           </h5>
+        </div>
+        <div class="row">
           <p>
             <!-- {{ store.threatSoftwareData.description }} -->
             <div v-html="markdown(store.threatSoftwareData.description)"></div>
