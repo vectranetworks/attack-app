@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import store from "/store/tnumlookup.mjs";
+import store from "store/tnumlookup.mjs";
 import { ref } from "vue";
 export default {
   setup() {

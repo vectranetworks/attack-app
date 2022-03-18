@@ -24,7 +24,7 @@ module.exports = reactive({
     try {
       let fetchData = await axios({
         method: "get",
-        url: "http://localhost:5000/api/groups",
+        url: "api/groups",
       });
       if (fetchData.data) {
         this.groupData = {
@@ -46,7 +46,7 @@ module.exports = reactive({
     try {
       let fetchData = await axios({
         method: "get",
-        url: `http://localhost:5000/api/get_group?group=${groupName}`,
+        url: `api/get_group?group=${groupName}`,
       });
       if (fetchData.data) {
         // Retrieve description, and then delete as it should not be a key

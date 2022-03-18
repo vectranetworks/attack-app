@@ -22,7 +22,7 @@ module.exports = reactive({
     try {
       let fetchData = await axios({
         method: "get",
-        url: "http://localhost:5000/api/software",
+        url: "api/software",
       });
       if (fetchData.data) {
         this.softwareData = {
@@ -44,7 +44,7 @@ module.exports = reactive({
     try {
       let fetchData = await axios({
         method: "get",
-        url: `http://localhost:5000/api/get_malware_tool?software=${softwareName}`,
+        url: `api/get_malware_tool?software=${softwareName}`,
       });
       if (fetchData.data) {
         // Retrieve description, and then delete as it should not be a key

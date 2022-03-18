@@ -19,7 +19,7 @@ module.exports = reactive({
     try {
       let fetchData = await axios({
         method: "get",
-        url: `http://localhost:5000/api/get_tnum_info?tnum=${event.srcElement.value}`,
+        url: `api/get_tnum_info?tnum=${event.srcElement.value}`,
       });
       if (!fetchData.data.error) {
         this.tnumData = {
@@ -59,7 +59,7 @@ module.exports = reactive({
     try {
       let fetchData = await axios({
         method: "get",
-        url: `http://localhost:5000/api/get_group?group=${groupName}`,
+        url: `api/get_group?group=${groupName}`,
       });
       if (fetchData.data) {
         // Retrieve description, and then delete as it should not be a key

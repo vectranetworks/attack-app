@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import store from "/store/software.mjs";
+import store from "store/software.mjs";
 import { ref } from "vue";
 export default {
   setup() {

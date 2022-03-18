@@ -156,7 +156,7 @@
 </template>
 
 <script>
-import store from "/store/groups.mjs";
+import store from "store/groups.mjs";
 import { ref } from "vue";
 export default {
   setup() {
