@@ -1,10 +1,10 @@
 <template>
   <q-layout view="hHh LpR fFf">
-    <q-header bordered class="bg-primary text-white">
+    <q-header bordered class="bg-primary text-white print-hidden">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title>
+        <q-toolbar-title class="print-hidden">
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
           </q-avatar>

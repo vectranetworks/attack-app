@@ -4,10 +4,10 @@
 
 <template>
   <div>
-    <h3>Threat Groups</h3>
+    <h3 class="print-hidden">Threat Groups</h3>
     <div class="q-pa-md">
-      <div class="q-gutter-sm">
-        <q-banner class="bg-primary text-white" v-if="store.selectedGroup">
+      <div class="q-gutter-sm print-hidden">
+        <q-banner class="bg-primary text-white " v-if="store.selectedGroup">
           You have selected: <b>{{ store.selectedGroup.value }}</b> who is know
           by: <b>{{ store.selectedGroup.name }}</b> in MITRE ATT&CK
         </q-banner>
@@ -22,7 +22,27 @@
           @filter="filterFn"
           label="Threat Group Alias"
         />
-        <div class="showempty" @click="showempty = !showempty">
+        </div>
+        <div class="q-pa-sm q-gutter-md print-hidden">
+          <q-toggle
+            v-model="showtnumdescriptions"
+            color="blue"
+            label="Show T-num Descriptions"
+          />
+
+          <q-toggle
+            v-model="showgroupdetections"
+            color="blue"
+            label="Show Detections"
+          />
+
+          <q-toggle
+            v-model="showempty"
+            color="red"
+            label="Show Empty Values"
+          />
+        </div>
+        <!-- <div class="showempty" @click="showempty = !showempty">
           {{ showempty ? "Hide" : "Show" }} Empty Values
         </div>
         <div
@@ -36,9 +56,9 @@
           @click="showgroupdetections = !showgroupdetections"
         >
           {{ showgroupdetections ? "Hide" : "Show" }} Cognito Detection List
-        </div>
+        </div> -->
       </div>
-
+      <div class="print-show-title" v-if="store.selectedGroup"><h3>Threat Group {{ store.selectedGroup.name }}</h3></div>
       <div class="row" v-if="store.selectedGroup">
         <template v-if="store.threatGroupData.loaded">
           <template
@@ -114,16 +134,10 @@
       </div>
       <template v-if="showgroupdetections && store.selectedGroup">
         <div class="row">
-          <!-- <div
-            class="showempty"
-            @click="showgroupdetectionsteps = !showgroupdetectionsteps"
-          >
-            {{ showgroupdetectionsteps ? "Hide" : "Show" }} Detection
-            Investigation Steps
-          </div> -->
         </div>
         <div class="row">
-          <table class="table">
+          <div class="column">
+          <table class="table" id="detections_table">
             <thead>
               <tr>
                 <th colspan="2">
@@ -145,6 +159,17 @@
               </tr>
             </template>
           </table>
+          </div>
+          <div class="q-pa-md q-gutter-sm print-hidden">
+            <q-btn
+              style="margin-top: 50px" 
+              class="material-icons-outlined print-hidden" 
+              @click="copy(groupDetections)" 
+              icon="content_copy" 
+            >
+              <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
+            </q-btn>
+          </div>
         </div>
       </template>
       <template v-if="store.selectedGroup && store.threatGroupData.description">
@@ -161,7 +186,7 @@
         </div>
       </template>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -181,6 +206,12 @@ export default {
   },
 
   methods: {
+    copy(s) {
+      let values = [...s];
+      // console.log(values);
+      navigator.clipboard.writeText(values.join(", "));
+     },
+
     filterFn: function (val, update) {
       if (val === "") {
         update(() => {
@@ -219,10 +250,11 @@ export default {
 
     markdown: function (input) {
       if (input) {
-        console.log(`${marked.parse(input)}`);
+        // console.log(`${marked.parse(input)}`);
         return `${marked.parse(input)}`;
       } else return null;
     },
+
   },
 
   computed: {
@@ -291,6 +323,8 @@ export default {
       items.sort((a, b) => (a.label < b.label ? -1 : 1));
       return items;
     },
+
+
   },
 
   mounted: function () {

@@ -1,5 +1,11 @@
 <template>
-  <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+  <q-drawer
+    show-if-above
+    v-model="leftDrawerOpen"
+    class="print-hidden"
+    side="left"
+    bordered
+  >
     <q-scroll-area class="fit">
       <q-list padding>
         <!-- Menu Item 1 -->

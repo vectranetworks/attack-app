@@ -49,3 +49,35 @@ th {
 td {
   border: 0.5px solid red;
 }
+
+/* Printing related */
+
+div.print-show-title {
+  visibility: hidden;
+  display: none;
+}
+
+@media print {
+  .print-hidden,
+  .q-drawer-container,
+  .q-toolbar-title {
+    visibility: hidden;
+    display: none;
+  }
+
+  div.print-show-header,
+  div.print-show-title {
+    visibility: visible !important;
+    display: flex;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .q-page-container {
+    padding-left: 0px !important;
+  }
+}

@@ -4,9 +4,9 @@
 
 <template>
   <div>
-    <h3>MITRE ATT&CK Technique Lookup</h3>
+    <h3 class="print-hidden">MITRE ATT&CK Technique Lookup</h3>
     <div class="q-pa-md">
-      <div class="q-gutter-sm" style="max-width: 300px">
+      <div class="q-gutter-sm print-hidden" style="max-width: 300px">
         <q-input
           v-model="value1"
           filled
@@ -103,6 +103,16 @@
               </template>
             </tbody>
           </table>
+          <div class="q-pa-md q-gutter-sm print-hidden">
+            <q-btn
+              style="margin-top: 50px" 
+              class="material-icons-outlined print-hidden" 
+              @click="copy(store.tnumData.detections)" 
+              icon="content_copy" 
+            >
+              <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
+            </q-btn>
+          </div>
         </template>
       </div>
     </div>
@@ -123,10 +133,17 @@ export default {
   methods: {
     markdown: function (input) {
       if (input) {
-        console.log(`${marked.parse(input)}`);
+        // console.log(`${marked.parse(input)}`);
         return `${marked.parse(input)}`;
       } else return null;
     },
+
+    copy(s) {
+      let values = [...s];
+      // console.log(values);
+      navigator.clipboard.writeText(values.join(", "));
+     },
+    
   },
 
   computed: {},

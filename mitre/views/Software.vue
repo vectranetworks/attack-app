@@ -4,9 +4,9 @@
 
 <template>
   <div>
-    <h3>Malware & Tools</h3>
+    <h3 class="print-hidden">Malware & Tools</h3>
     <div class="q-pa-md">
-      <div class="q-gutter-md">
+      <div class="q-gutter-md print-hidden">
         <q-banner class="bg-primary text-white" v-if="store.selectedSoftware">
           You have selected: <b>{{ store.selectedSoftware.value }}</b> who is
           know by: <b>{{ store.selectedSoftware.name }}</b> in MITRE ATT&CK
@@ -22,7 +22,27 @@
           @filter="filterFn"
           label="Malware or Tool Alias"
         />
-        <div class="showempty" @click="this.showempty = !this.showempty">
+      </div>
+      <div class="q-gutter-sm print-hidden">
+        <q-toggle
+          v-model="showtnumdsc"
+          color="blue"
+          label="Show T-num Descriptions"
+        />
+
+        <q-toggle
+          v-model="showsoftwaredetections"
+          color="blue"
+          label="Show Detections"
+        />
+
+        <q-toggle
+          v-model="this.showempty"
+          color="red"
+          label="Show Empty Values"
+        />
+      </div>
+        <!-- <div class="showempty" @click="this.showempty = !this.showempty">
           {{ this.showempty ? "Hide" : "Show" }} Empty Values
         </div>
         <div class="showempty" @click="showtnumdsc = !showtnumdsc">
@@ -33,8 +53,8 @@
           @click="showsoftwaredetections = !showsoftwaredetections"
         >
           {{ showsoftwaredetections ? "Hide" : "Show" }} Cognito Detection List
-        </div>
-      </div>
+        </div> -->
+      <div class="print-show-title" v-if="store.selectedSoftware"><h3>Malware/Tool {{ store.selectedSoftware.name }}</h3></div>
       <div class="row">
         <template v-if="store.selectedSoftware">
           <template
@@ -109,13 +129,6 @@
       </div>
       <template v-if="showsoftwaredetections && store.selectedSoftware">
         <div class="row">
-          <!-- <div
-            class="showempty"
-            @click="showsoftwaredetectionsteps = !showsoftwaredetectionsteps"
-          >
-            {{ showsoftwaredetectionsteps ? "Hide" : "Show" }} Detection
-            Investigation Steps
-          </div> -->
         </div>
         <div class="row">
           <table class="table">
@@ -140,6 +153,18 @@
               </tr>
             </template>
           </table>
+        
+          <div class="q-pa-md q-gutter-sm print-hidden">
+              <q-btn
+                style="margin-top: 50px" 
+                class="material-icons-outlined print-hidden" 
+                @click="copy(softwareDetections)" 
+                icon="content_copy" 
+              >
+                <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
+              </q-btn>
+            </div>
+          </div>
         </div>
       </template>
       <template
@@ -176,6 +201,12 @@ export default {
   },
 
   methods: {
+    copy(s) {
+      let values = [...s];
+      // console.log(values);
+      navigator.clipboard.writeText(values.join(", "));
+     },
+    
     filterFn: function (val, update) {
       if (val === "") {
         update(() => {
