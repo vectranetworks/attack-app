@@ -25,34 +25,132 @@ div.showempty {
   padding: 2px;
 }
 
-table {
-  float: left;
-  border: 0.5px solid blue;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  /* padding: 10px 15px;
-  background: rgba(86, 61, 124, 0.15);
-  border: 1px solid rgba(86, 61, 124, 0.2);
-  display: table-row-group;
-  vertical-align: middle;
-  border-color: inherit; */
+@media print {
+  .titleLogo {
+    width: 100%;
+    position: absolute;
+    left: 0px;
+  }
+  .pageBreak {
+    page-break-before: always;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-bottom: none !important;
+  }
+  header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background-color: white !important;
+    height: 2.3cm;
+  }
+  footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    padding: 1cm;
+    padding-top: 0cm;
+    background-color: white;
+  }
+  .header-space {
+    height: 2.2cm;
+    background-color: white !important;
+  }
+  .footer-spacer {
+    height: 2cm;
+    width: 100%;
+    background-color: white !important;
+  }
+}
+.sectionTitle {
+  font-weight: 600;
+  color: #4b8b40;
+}
+.headerTable {
+  width: 100%;
+  background: url("${newLogo}");
+  background-size: 100%;
+  text-align: right;
+  color: white;
+  padding-top: 12px;
+  font-weight: 600;
+  height: 70px;
+  background-repeat: no-repeat;
+}
+.table {
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+}
+.techniques {
+  page-break-inside: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table thead th {
+  text-transform: capitalize;
+  background-color: #1e88e5;
+  color: white;
+}
+.table th,
+.table td {
+  text-align: left;
+  padding: 5px;
+  border-bottom: 0.5px solid #2196f3;
+  border-right: 0.5px solid #2196f3;
+  vertical-align: top;
+}
+.titleWidth {
+  width: 120px;
+}
+.table th:last-child,
+.table td:last-child {
+  border-right: none;
+  border-bottom: 0.5px solid #2196f3;
+}
+.table tr:nth-child(odd) {
+  background-color: #424242;
 }
 
-tr {
-  border: 1.5px solid blue;
+.pageContent {
+  padding: 1cm;
 }
-
-th {
-  border: 1px solid blue;
+#printSection {
+  max-width: 240mm;
+  background-color: white;
+  color: rgba(0, 0, 0, 0.8);
 }
-
-td {
-  border: 0.5px solid red;
+.titleHolder {
+  position: absolute;
+  right: -20px;
+  top: -12px;
+  width: 308px;
+  height: 70px;
+  max-width: 340px;
+}
+.titleBox {
+  top: 50%;
+  transform: translate(0, -50%);
+  position: absolute;
+  right: 0px;
+  font-size: 14pt;
+  line-height: 14pt;
+  padding-right: 10px;
+}
+h3 {
+  margin: 0px !important;
 }
 
 /* Printing related */
 
-div.print-show-title {
+.print-show-title {
   visibility: hidden;
   display: none;
 }
@@ -63,12 +161,25 @@ div.print-show-title {
   .q-toolbar-title {
     visibility: hidden;
     display: none;
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+
+  .q-header {
+    background: white !important;
+    border: none !important;
+  }
+
+  .print-show-title {
+    visibility: visible;
+    display: initial;
   }
 
   div.print-show-header,
   div.print-show-title {
     visibility: visible !important;
     display: flex;
+    margin: 0px;
   }
 
   table {
