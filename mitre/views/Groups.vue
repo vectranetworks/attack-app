@@ -42,6 +42,14 @@
             label="Show Empty Values"
           />
         </div>
+          <div v-if="displaycat" class="q-gutter-sm print-hidden">
+            <template v-if="displaycat" v-for="cat in Object.keys(this.displaycat)">
+              <q-chip size="sm" square dense v-model:selected="displaycat[cat]" color="primary" text-color="white">
+                {{ cat }}
+              </q-chip>
+            </template>
+        
+          </div>
         <!-- <div class="showempty" @click="showempty = !showempty">
           {{ showempty ? "Hide" : "Show" }} Empty Values
         </div>
@@ -65,7 +73,7 @@
             v-if="store.threatGroupData.loaded"
             v-for="cat in Object.keys(store.threatGroupData.data)"
           >
-            <table class="table">
+            <table v-if="this.displaycat[cat]" class="table">
               <thead>
                 <tr>
                   <th colspan="2">{{ cat }}</th>
@@ -191,7 +199,7 @@
 
 <script>
 import store from "store/groups.mjs";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
 export default {
   setup() {
@@ -202,7 +210,18 @@ export default {
       showgroupdetections: ref(false),
       showgroupdetectionsteps: ref(false),
       options: ref([]),
+      displaycat: reactive({}),
     };
+  },
+
+  watch: {
+    categories: function () {
+      console.log("calling genCategories");
+      for (let cat of Object.keys(store.threatGroupData.data)) {
+        this.displaycat[cat] = true;
+      }
+      console.log(this.displaycat);
+    }
   },
 
   methods: {
@@ -258,6 +277,12 @@ export default {
   },
 
   computed: {
+    categories: function () {
+      if (store.threatGroupData.data) {
+      return Object.keys(store.threatGroupData.data);
+      }
+    },
+
     groupDescriptions: function () {
       let groupDescriptionsData = [];
       if (store.threatGroupData.loaded) {
@@ -271,7 +296,7 @@ export default {
             }
           }
         }
-        console.log(groupDescriptionsData);
+        // console.log(groupDescriptionsData);
 
         //Sort numerically
         groupDescriptionsData.sort((a, b) => (a.tnum < b.tnum ? -1 : 1));
