@@ -25,16 +25,8 @@
         />
       </div>
       <div class="q-pa-sm q-gutter-md print-hidden">
-        <q-toggle
-          v-model="showtnumdescriptions"
-          color="blue"
-          label="Show T-num Descriptions"
-        />
-        <q-toggle
-          v-model="showgroupdetections"
-          color="blue"
-          label="Show Detections"
-        />
+        <q-toggle v-model="showtnumdescriptions" color="blue" label="Show T-num Descriptions" />
+        <q-toggle v-model="showgroupdetections" color="blue" label="Show Detections" />
         <q-toggle v-model="showempty" color="red" label="Show Empty Values" />
         <q-btn
           icon="print"
@@ -50,9 +42,7 @@
       <div class="row" v-if="store.selectedGroup">
         <template v-if="store.threatGroupData.loaded">
           <div class="print-show-title">
-            <h1 class="sectionTitle">
-              Threat Group {{ store.selectedGroup.name }}
-            </h1>
+            <h1 class="sectionTitle">Threat Group {{ store.selectedGroup.name }}</h1>
             <h3 class="sectionTitle">MITRE ATT&amp;CK T-Numbers</h3>
             This section will list all the T-Numbers known to be used by the
             group {{ store.selectedGroup.name }} and associated detections
@@ -65,7 +55,7 @@
             v-if="store.threatGroupData.loaded"
             v-for="cat in Object.keys(store.threatGroupData.data)"
           >
-            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
               <table class="table">
                 <thead>
                   <tr>
@@ -73,29 +63,20 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template
-                    v-for="tnum in Object.keys(store.threatGroupData.data[cat])"
-                  >
-                    <tr
-                      v-if="
-                        store.threatGroupData.data[cat][tnum].detections
-                          .length || showempty
-                      "
-                      v-for="(det, index) in store.threatGroupData.data[cat][
-                        tnum
-                      ].detections"
-                    >
+                  <template v-for="tnum in Object.keys(store.threatGroupData.data[cat])">
+                    <tr v-for="(det, index) in store.threatGroupData.data[cat][tnum].detections">
                       <th
-                        :rowspan="
-                          store.threatGroupData.data[cat][tnum].detections
-                            .length
-                        "
+                        :rowspan="store.threatGroupData.data[cat][tnum].detections.length"
                         class="titleWidth"
                         v-if="index == 0"
-                      >
-                        {{ tnum }}
-                      </th>
+                      >{{ tnum }}</th>
                       <td>{{ det }}</td>
+                    </tr>
+                    <tr
+                      v-if="!store.threatGroupData.data[cat][tnum].detections.length && showempty"
+                    >
+                      <th>{{ tnum }}</th>
+                      <td></td>
                     </tr>
                   </template>
                 </tbody>
@@ -179,9 +160,7 @@
       <template v-if="store.selectedGroup && store.threatGroupData.description">
         <div class="pageBreak" />
         <div class="row">
-          <h3 class="sectionTitle">
-            {{ store.selectedGroup.value }} Description
-          </h3>
+          <h3 class="sectionTitle">{{ store.selectedGroup.value }} Description</h3>
         </div>
         <div class="row">
           <div v-html="markdown(store.threatGroupData.description)"></div>
@@ -194,11 +173,11 @@
 
 <script>
 import store from "store/groups.mjs";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { Print } from "../mixins/print.mjs";
 
 export default {
-  setup() {
+  setup () {
     return {
       store,
       showempty: ref(true),
@@ -211,7 +190,7 @@ export default {
   },
   mixins: [Print],
   methods: {
-    copy(s) {
+    copy (s) {
       let values = [...s];
       // console.log(values);
       navigator.clipboard.writeText(values.join(", "));

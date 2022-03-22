@@ -25,7 +25,7 @@
       <div class="row">
         <template v-if="store.selectedSoftware">
           <template v-if="store.threatSoftwareData.loaded" v-for="cat in Object.keys(store.threatSoftwareData.data)">
-            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
               <table class="table">
                 <thead>
                   <tr>
@@ -34,11 +34,14 @@
                 </thead>
                 <tbody>
                   <template v-for="tnum in Object.keys(store.threatSoftwareData.data[cat])">
-                    <tr v-if="store.threatSoftwareData.data[cat][tnum].detections.length || showempty"
-                      v-for="(det, index) in store.threatSoftwareData.data[cat][tnum].detections">
+                    <tr v-for="(det, index) in store.threatSoftwareData.data[cat][tnum].detections">
                       <th :rowspan="store.threatSoftwareData.data[cat][tnum].detections.length" class="titleWidth"
                         v-if="index == 0">{{ tnum }}</th>
                       <td>{{ det }}</td>
+                    </tr>
+                    <tr v-if="!store.threatSoftwareData.data[cat][tnum].detections.length && showempty">
+                      <th>{{ tnum }}</th>
+                      <td></td>
                     </tr>
                   </template>
                 </tbody>
