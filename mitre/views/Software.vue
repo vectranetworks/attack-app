@@ -4,105 +4,46 @@
 
 <template>
   <div>
-    <h3 class="print-hidden">Malware & Tools</h3>
+    <h3>Malware & Tools</h3>
     <div class="q-pa-md">
-      <div class="q-gutter-md print-hidden">
+      <div class="q-gutter-md">
         <q-banner class="bg-primary text-white" v-if="store.selectedSoftware">
           You have selected: <b>{{ store.selectedSoftware.value }}</b> who is
           know by: <b>{{ store.selectedSoftware.name }}</b> in MITRE ATT&CK
         </q-banner>
-        <q-select
-          filled
-          use-input
-          clearable
-          input-debounce="0"
-          v-model="store.selectedSoftware"
-          @update:model-value="store.fetchSoftware(store.selectedSoftware.name)"
-          :options="options"
-          @filter="filterFn"
-          label="Malware or Tool Alias"
-        />
-      </div>
-      <div class="q-gutter-sm print-hidden">
-        <q-toggle
-          v-model="showtnumdsc"
-          color="blue"
-          label="Show T-num Descriptions"
-        />
+        <q-select filled use-input clearable input-debounce="0" v-model="store.selectedSoftware"
+          @update:model-value="store.fetchSoftware(store.selectedSoftware.name)" :options="options" @filter="filterFn"
+          label="Malware or Tool Alias" />
 
-        <q-toggle
-          v-model="showsoftwaredetections"
-          color="blue"
-          label="Show Detections"
-        />
+        <div class="q-pa-sm q-gutter-md print-hidden">
+          <q-toggle v-model="showtnumdescriptions" color="blue" label="Show T-num Descriptions" />
+          <q-toggle v-model="showgroupdetections" color="blue" label="Show Detections" />
+          <q-toggle v-model="showempty" color="red" label="Show Empty Values" />
+        </div>
 
-        <q-toggle
-          v-model="this.showempty"
-          color="red"
-          label="Show Empty Values"
-        />
       </div>
-        <!-- <div class="showempty" @click="this.showempty = !this.showempty">
-          {{ this.showempty ? "Hide" : "Show" }} Empty Values
-        </div>
-        <div class="showempty" @click="showtnumdsc = !showtnumdsc">
-          {{ showtnumdsc ? "Hide" : "Show" }} T-number descriptions
-        </div>
-        <div
-          class="showempty"
-          @click="showsoftwaredetections = !showsoftwaredetections"
-        >
-          {{ showsoftwaredetections ? "Hide" : "Show" }} Cognito Detection List
-        </div> -->
-      <div class="print-show-title" v-if="store.selectedSoftware"><h3>Malware/Tool {{ store.selectedSoftware.name }}</h3></div>
       <div class="row">
         <template v-if="store.selectedSoftware">
-          <template
-            v-if="store.threatSoftwareData.loaded"
-            v-for="cat in Object.keys(store.threatSoftwareData.data)"
-          >
-            <table class="table">
-              <thead>
-                <tr>
-                  <th colspan="2">{{ cat }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template
-                  v-for="tnum in Object.keys(
-                    store.threatSoftwareData.data[cat]
-                  )"
-                >
-                  <tr
-                    v-if="
-                      store.threatSoftwareData.data[cat][tnum].detections
-                        .length || showempty
-                    "
-                  >
-                    <th
-                      :rowspan="
-                        store.threatSoftwareData.data[cat][tnum].detections
-                          .length + 1
-                      "
-                    >
-                      {{ tnum }}
-                    </th>
+          <template v-if="store.threatSoftwareData.loaded" v-for="cat in Object.keys(store.threatSoftwareData.data)">
+            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th colspan="2">{{ cat }}</th>
                   </tr>
-                  <tr
-                    v-if="
-                      store.threatSoftwareData.data[cat][tnum].detections
-                        .length || showempty
-                    "
-                    v-for="det in store.threatSoftwareData.data[cat][tnum]
-                      .detections"
-                  >
-                    <td>
-                      {{ det }}
-                    </td>
-                  </tr>
-                </template>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <template v-for="tnum in Object.keys(store.threatSoftwareData.data[cat])">
+                    <tr v-if="store.threatSoftwareData.data[cat][tnum].detections.length || showempty"
+                      v-for="(det, index) in store.threatSoftwareData.data[cat][tnum].detections">
+                      <th :rowspan="store.threatSoftwareData.data[cat][tnum].detections.length" class="titleWidth"
+                        v-if="index == 0">{{ tnum }}</th>
+                      <td>{{ det }}</td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
           </template>
         </template>
       </div>
@@ -129,6 +70,13 @@
       </div>
       <template v-if="showsoftwaredetections && store.selectedSoftware">
         <div class="row">
+          <!-- <div
+            class="showempty"
+            @click="showsoftwaredetectionsteps = !showsoftwaredetectionsteps"
+          >
+            {{ showsoftwaredetectionsteps ? "Hide" : "Show" }} Detection
+            Investigation Steps
+          </div> -->
         </div>
         <div class="row">
           <table class="table">
@@ -153,23 +101,9 @@
               </tr>
             </template>
           </table>
-        
-          <div class="q-pa-md q-gutter-sm print-hidden">
-              <q-btn
-                style="margin-top: 50px" 
-                class="material-icons-outlined print-hidden" 
-                @click="copy(softwareDetections)" 
-                icon="content_copy" 
-              >
-                <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
-              </q-btn>
-            </div>
-          </div>
         </div>
       </template>
-      <template
-        v-if="store.selectedSoftware && store.threatSoftwareData.description"
-      >
+      <template v-if="store.selectedSoftware && store.threatSoftwareData.description">
         <div class="row">
           <h5>
             <b>{{ store.selectedSoftware.name }}</b> description:
@@ -178,7 +112,7 @@
         <div class="row">
           <p>
             <!-- {{ store.threatSoftwareData.description }} -->
-            <div v-html="markdown(store.threatSoftwareData.description)"></div>
+          <div v-html="markdown(store.threatSoftwareData.description)"></div>
           </p>
         </div>
       </template>
@@ -190,7 +124,7 @@
 import store from "store/software.mjs";
 import { ref } from "vue";
 export default {
-  setup() {
+  setup () {
     return {
       store,
       showempty: ref(true),
@@ -201,12 +135,6 @@ export default {
   },
 
   methods: {
-    copy(s) {
-      let values = [...s];
-      // console.log(values);
-      navigator.clipboard.writeText(values.join(", "));
-     },
-    
     filterFn: function (val, update) {
       if (val === "") {
         update(() => {

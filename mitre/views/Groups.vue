@@ -7,9 +7,10 @@
     <h3 class="print-hidden">Threat Groups</h3>
     <div class="q-pa-md">
       <div class="q-gutter-sm print-hidden">
-        <q-banner class="bg-primary text-white " v-if="store.selectedGroup">
-          You have selected: <b>{{ store.selectedGroup.value }}</b> who is know
-          by: <b>{{ store.selectedGroup.name }}</b> in MITRE ATT&CK
+        <q-banner class="bg-primary text-white" v-if="store.selectedGroup">
+          You have selected:
+          <b>{{ store.selectedGroup.value }}</b> who is know by:
+          <b>{{ store.selectedGroup.name }}</b> in MITRE ATT&CK
         </q-banner>
         <q-select
           filled
@@ -22,158 +23,153 @@
           @filter="filterFn"
           label="Threat Group Alias"
         />
-        </div>
-        <div class="q-pa-sm q-gutter-md print-hidden">
-          <q-toggle
-            v-model="showtnumdescriptions"
-            color="blue"
-            label="Show T-num Descriptions"
-          />
-
-          <q-toggle
-            v-model="showgroupdetections"
-            color="blue"
-            label="Show Detections"
-          />
-
-          <q-toggle
-            v-model="showempty"
-            color="red"
-            label="Show Empty Values"
-          />
-        </div>
-          <div v-if="displaycat" class="q-gutter-sm print-hidden">
-            <template v-if="displaycat" v-for="cat in Object.keys(this.displaycat)">
-              <q-chip size="sm" square dense v-model:selected="displaycat[cat]" color="primary" text-color="white">
-                {{ cat }}
-              </q-chip>
-            </template>
-        
-          </div>
-        <!-- <div class="showempty" @click="showempty = !showempty">
-          {{ showempty ? "Hide" : "Show" }} Empty Values
-        </div>
-        <div
-          class="showempty"
-          @click="showtnumdescriptions = !showtnumdescriptions"
-        >
-          {{ showtnumdescriptions ? "Hide" : "Show" }} T-number descriptions
-        </div>
-        <div
-          class="showempty"
-          @click="showgroupdetections = !showgroupdetections"
-        >
-          {{ showgroupdetections ? "Hide" : "Show" }} Cognito Detection List
-        </div> -->
       </div>
-      <div class="print-show-title" v-if="store.selectedGroup"><h3>Threat Group {{ store.selectedGroup.name }}</h3></div>
+      <div class="q-pa-sm q-gutter-md print-hidden">
+        <q-toggle
+          v-model="showtnumdescriptions"
+          color="blue"
+          label="Show T-num Descriptions"
+        />
+        <q-toggle
+          v-model="showgroupdetections"
+          color="blue"
+          label="Show Detections"
+        />
+        <q-toggle v-model="showempty" color="red" label="Show Empty Values" />
+        <q-btn
+          icon="print"
+          class="print-hidden"
+          @click="printDoc()"
+          label="Print Results"
+          v-if="store.selectedGroup"
+          color="green"
+        ></q-btn>
+      </div>
+    </div>
+    <div id="printArea" class="q-pa-md">
       <div class="row" v-if="store.selectedGroup">
         <template v-if="store.threatGroupData.loaded">
+          <div class="print-show-title">
+            <h1 class="sectionTitle">
+              Threat Group {{ store.selectedGroup.name }}
+            </h1>
+            <h3 class="sectionTitle">MITRE ATT&amp;CK T-Numbers</h3>
+            This section will list all the T-Numbers known to be used by the
+            group {{ store.selectedGroup.name }} and associated detections
+            within Vectra Cognito Detect that will monitor for activity seen to
+            be utilising the method.
+            <br />
+            <br />
+          </div>
           <template
             v-if="store.threatGroupData.loaded"
             v-for="cat in Object.keys(store.threatGroupData.data)"
           >
-            <table v-if="this.displaycat[cat]" class="table">
-              <thead>
-                <tr>
-                  <th colspan="2">{{ cat }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template
-                  v-for="tnum in Object.keys(store.threatGroupData.data[cat])"
-                >
-                  <tr
-                    v-if="
-                      store.threatGroupData.data[cat][tnum].detections.length ||
-                      showempty
-                    "
+            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th colspan="2">{{ cat }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template
+                    v-for="tnum in Object.keys(store.threatGroupData.data[cat])"
                   >
-                    <th
-                      :rowspan="
+                    <tr
+                      v-if="
                         store.threatGroupData.data[cat][tnum].detections
-                          .length + 1
+                          .length || showempty
                       "
+                      v-for="(det, index) in store.threatGroupData.data[cat][
+                        tnum
+                      ].detections"
                     >
-                      {{ tnum }}
-                    </th>
-                  </tr>
-                  <tr
-                    v-if="
-                      store.threatGroupData.data[cat][tnum].detections.length ||
-                      showempty
-                    "
-                    v-for="det in store.threatGroupData.data[cat][tnum]
-                      .detections"
-                  >
-                    <td>
-                      {{ det }}
-                    </td>
-                  </tr>
-                </template>
-              </tbody>
-            </table>
+                      <th
+                        :rowspan="
+                          store.threatGroupData.data[cat][tnum].detections
+                            .length
+                        "
+                        class="titleWidth"
+                        v-if="index == 0"
+                      >
+                        {{ tnum }}
+                      </th>
+                      <td>{{ det }}</td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
           </template>
         </template>
       </div>
       <div class="row" v-if="store.selectedGroup">
         <template v-if="showtnumdescriptions">
-          <table class="table">
+          <div class="pageBreak" />
+          <div class="print-show-title">
+            <h3 class="sectionTitle">MITRE ATT&amp;CK T-Number Descriptions</h3>
+            This section describes the MITRE Techniques known to be used by the
+            group {{ store.selectedGroup.name }}.
+            <br />
+            <br />
+          </div>
+          <table class="table techniques">
             <thead>
               <tr>
-                <th colspan="2">
-                  Cognito's Coverage of MITRE Techniques, Descriptions used by
-                  {{ store.selectedGroup.value }}
-                </th>
+                <th class="titleWidth">T-Number</th>
+                <th>Description</th>
               </tr>
             </thead>
             <template v-for="item in groupDescriptions">
               <tr>
-                <th>
-                  {{ item.tnum }}
-                </th>
-                <td>
-                  {{ item.description }}
-                </td>
+                <th class="titleWidth">{{ item.tnum }}</th>
+                <td>{{ item.description }}</td>
               </tr>
             </template>
           </table>
         </template>
       </div>
       <template v-if="showgroupdetections && store.selectedGroup">
-        <div class="row">
+        <div class="pageBreak" />
+        <div class="print-show-title">
+          <h3 class="sectionTitle">
+            Cognito's Coverage of MITRE Techniques for Group
+            {{ store.selectedGroup.name }}
+          </h3>
+          This section describes the detections within Cognito Detect that are
+          known to trigger on techniques used by the group
+          {{ store.selectedGroup.name }}.
+          <br />
+          <br />
         </div>
         <div class="row">
           <div class="column">
-          <table class="table" id="detections_table">
-            <thead>
-              <tr>
-                <th colspan="2">
-                  Cognito's Coverage of MITRE Techniques for Group
-                  {{ store.selectedGroup.value }}
-                </th>
-              </tr>
-            </thead>
-            <template v-for="det in groupDetections">
-              <tr>
-                <th>
-                  {{ det }}
-                </th>
-                <template v-if="showgroupdetectionsteps">
-                  <td>
-                    {{ det }}
-                  </td>
-                </template>
-              </tr>
-            </template>
-          </table>
+            <table class="table techniques" id="detections_table">
+              <thead>
+                <tr>
+                  <th colspan="2">
+                    Detection
+                    {{ store.selectedGroup.value }}
+                  </th>
+                </tr>
+              </thead>
+              <template v-for="det in groupDetections">
+                <tr>
+                  <th class="titleWidth">{{ det }}</th>
+                  <template v-if="showgroupdetectionsteps">
+                    <td>{{ det }}</td>
+                  </template>
+                </tr>
+              </template>
+            </table>
           </div>
           <div class="q-pa-md q-gutter-sm print-hidden">
             <q-btn
-              style="margin-top: 50px" 
-              class="material-icons-outlined print-hidden" 
-              @click="copy(groupDetections)" 
-              icon="content_copy" 
+              style="margin-top: 50px"
+              class="material-icons-outlined print-hidden"
+              @click="copy(groupDetections)"
+              icon="content_copy"
             >
               <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
             </q-btn>
@@ -181,25 +177,25 @@
         </div>
       </template>
       <template v-if="store.selectedGroup && store.threatGroupData.description">
+        <div class="pageBreak" />
         <div class="row">
-          <h5>
-            <b>{{ store.selectedGroup.value }}</b> description:
-          </h5>
+          <h3 class="sectionTitle">
+            {{ store.selectedGroup.value }} Description
+          </h3>
         </div>
         <div class="row">
-        <p>
-            <!-- {{ store.threatGroupData.description }}</p> -->
           <div v-html="markdown(store.threatGroupData.description)"></div>
-          </p>
         </div>
       </template>
     </div>
+  </div>
   <!-- </div> -->
 </template>
 
 <script>
 import store from "store/groups.mjs";
-import { ref, reactive } from "vue";
+import { ref } from "vue";
+import { Print } from "../mixins/print.mjs";
 
 export default {
   setup() {
@@ -213,24 +209,17 @@ export default {
       displaycat: reactive({}),
     };
   },
-
-  watch: {
-    categories: function () {
-      console.log("calling genCategories");
-      for (let cat of Object.keys(store.threatGroupData.data)) {
-        this.displaycat[cat] = true;
-      }
-      console.log(this.displaycat);
-    }
-  },
-
+  mixins: [Print],
   methods: {
     copy(s) {
       let values = [...s];
       // console.log(values);
       navigator.clipboard.writeText(values.join(", "));
-     },
-
+    },
+    printDoc: function () {
+      let content = document.getElementById("printArea").innerHTML;
+      this.printDocument(content, this.store.selectedGroup.name);
+    },
     filterFn: function (val, update) {
       if (val === "") {
         update(() => {
@@ -273,13 +262,12 @@ export default {
         return `${marked.parse(input)}`;
       } else return null;
     },
-
   },
 
   computed: {
     categories: function () {
       if (store.threatGroupData.data) {
-      return Object.keys(store.threatGroupData.data);
+        return Object.keys(store.threatGroupData.data);
       }
     },
 
@@ -348,8 +336,6 @@ export default {
       items.sort((a, b) => (a.label < b.label ? -1 : 1));
       return items;
     },
-
-
   },
 
   mounted: function () {

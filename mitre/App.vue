@@ -7,8 +7,7 @@
         <q-toolbar-title class="print-hidden">
           <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
-          </q-avatar>
-          MITRE ATT&CK Explorer
+          </q-avatar>MITRE ATT&CK Explorer
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -28,11 +27,11 @@ import { ref } from "vue";
 import Navigation from "./components/Navigation.vue";
 
 export default {
-  setup() {
+  setup () {
     const leftDrawerOpen = ref(true);
     return {
       leftDrawerOpen,
-      toggleLeftDrawer() {
+      toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
     };
