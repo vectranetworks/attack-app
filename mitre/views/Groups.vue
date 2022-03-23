@@ -45,6 +45,21 @@
           color="green"
         ></q-btn>
       </div>
+      <div v-if="displaycat" class="q-gutter-md print-hidden">
+        <template v-if="displaycat" v-for="cat in Object.keys(this.displaycat)">
+          <q-chip
+            clickable
+            size="md"
+            square
+            dense
+            @click="displaycat[cat] = !displaycat[cat]"
+            :color="displaycat[cat] ? 'green' : 'red'"
+            text-color="white"
+          >
+            {{ cat }}
+          </q-chip>
+        </template>
+      </div>
     </div>
     <div id="printArea" class="q-pa-md">
       <div class="row" v-if="store.selectedGroup">
@@ -89,7 +104,13 @@
             v-for="cat in Object.keys(store.threatGroupData.data)"
           >
             <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
-              <table class="table">
+              <table
+                v-if="
+                  this.displaycat[cat] &&
+                  (this.showempty || detectionsCatNotEmpty([cat]))
+                "
+                class="table"
+              >
                 <thead>
                   <tr>
                     <th colspan="2">{{ cat }}</th>
@@ -234,6 +255,16 @@ export default {
     };
   },
 
+  watch: {
+    categories: function () {
+      console.log("calling genCategories");
+      for (let cat of Object.keys(store.threatGroupData.data)) {
+        this.displaycat[cat] = true;
+      }
+      console.log(this.displaycat);
+    },
+  },
+
   mixins: [Print],
 
   methods: {
@@ -246,6 +277,16 @@ export default {
     printDoc: function () {
       let content = document.getElementById("printArea").innerHTML;
       this.printDocument(content, this.store.selectedGroup.name);
+    },
+
+    detectionsCatNotEmpty: function (category) {
+      let detCount = 0;
+      for (let tnum of Object.keys(store.threatGroupData.data[category])) {
+        detCount +=
+          store.threatGroupData.data[category][tnum].detections.length;
+      }
+      console.log(Boolean(detCount));
+      return Boolean(detCount);
     },
 
     filterFn: function (val, update) {

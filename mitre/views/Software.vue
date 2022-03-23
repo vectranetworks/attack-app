@@ -47,6 +47,21 @@
           color="green"
         ></q-btn>
       </div>
+      <div v-if="displaycat" class="q-gutter-md print-hidden">
+        <template v-if="displaycat" v-for="cat in Object.keys(this.displaycat)">
+          <q-chip
+            clickable
+            size="md"
+            square
+            dense
+            @click="displaycat[cat] = !displaycat[cat]"
+            :color="displaycat[cat] ? 'green' : 'red'"
+            text-color="white"
+          >
+            {{ cat }}
+          </q-chip>
+        </template>
+      </div>
     </div>
     <div id="printArea" class="q-pa-md">
       <div class="row" v-if="store.selectedSoftware">
@@ -95,7 +110,13 @@
             v-for="cat in Object.keys(store.threatSoftwareData.data)"
           >
             <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
-              <table class="table">
+              <table
+                v-if="
+                  this.displaycat[cat] &&
+                  (this.showempty || detectionsCatNotEmpty([cat]))
+                "
+                class="table"
+              >
                 <thead>
                   <tr>
                     <th colspan="2">{{ cat }}</th>
@@ -245,7 +266,7 @@
 
 <script>
 import store from "store/software.mjs";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { Print } from "../mixins/print.mjs";
 
 export default {
@@ -256,7 +277,18 @@ export default {
       showtnumdsc: ref(true),
       showsoftwaredetections: ref(true),
       options: ref([]),
+      displaycat: reactive({}),
     };
+  },
+
+  watch: {
+    categories: function () {
+      console.log("calling genCategories");
+      for (let cat of Object.keys(store.threatSoftwareData.data)) {
+        this.displaycat[cat] = true;
+      }
+      console.log(this.displaycat);
+    },
   },
 
   mixins: [Print],
@@ -271,6 +303,16 @@ export default {
     printDoc: function () {
       let content = document.getElementById("printArea").innerHTML;
       this.printDocument(content, this.store.selectedSoftware.name);
+    },
+
+    detectionsCatNotEmpty: function (category) {
+      let detCount = 0;
+      for (let tnum of Object.keys(store.threatSoftwareData.data[category])) {
+        detCount +=
+          store.threatSoftwareData.data[category][tnum].detections.length;
+      }
+      console.log(Boolean(detCount));
+      return Boolean(detCount);
     },
 
     filterFn: function (val, update) {
@@ -318,6 +360,12 @@ export default {
   },
 
   computed: {
+    categories: function () {
+      if (store.threatSoftwareData.data) {
+        return Object.keys(store.threatSoftwareData.data);
+      }
+    },
+
     softwareDescriptions: function () {
       let softwareDescriptionsData = [];
       if (store.threatSoftwareData.loaded) {
