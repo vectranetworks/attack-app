@@ -9,7 +9,7 @@
       <div class="q-gutter-sm print-hidden">
         <q-banner class="bg-primary text-white" v-if="store.selectedGroup">
           You have selected:
-          <b>{{ store.selectedGroup.value }}</b> who is know by:
+          <b>{{ store.selectedGroup.value }}</b> who is known by:
           <b>{{ store.selectedGroup.name }}</b> in MITRE ATT&CK
         </q-banner>
         <q-select
@@ -25,8 +25,16 @@
         />
       </div>
       <div class="q-pa-sm q-gutter-md print-hidden">
-        <q-toggle v-model="showtnumdescriptions" color="blue" label="Show T-num Descriptions" />
-        <q-toggle v-model="showgroupdetections" color="blue" label="Show Detections" />
+        <q-toggle
+          v-model="showtnumdescriptions"
+          color="blue"
+          label="Show T-num Descriptions"
+        />
+        <q-toggle
+          v-model="showgroupdetections"
+          color="blue"
+          label="Show Detections"
+        />
         <q-toggle v-model="showempty" color="red" label="Show Empty Values" />
         <q-btn
           icon="print"
@@ -42,7 +50,32 @@
       <div class="row" v-if="store.selectedGroup">
         <template v-if="store.threatGroupData.loaded">
           <div class="print-show-title">
-            <h1 class="sectionTitle">Threat Group {{ store.selectedGroup.name }}</h1>
+            <h1 class="sectionTitle">
+              Threat Group {{ store.selectedGroup.name }}
+            </h1>
+            <!-- <h3 class="sectionTitle">MITRE ATT&amp;CK T-Numbers</h3>
+            This section will list all the T-Numbers known to be used by the
+            group {{ store.selectedGroup.name }} and associated detections
+            within Vectra Cognito Detect that will monitor for activity seen to
+            be utilising the method. -->
+            <br />
+            <br />
+          </div>
+          <!-- Group description -->
+          <template
+            v-if="store.selectedGroup && store.threatGroupData.description"
+          >
+            <!-- <div class="pageBreak" /> -->
+            <div class="row">
+              <h3 class="sectionTitle">
+                {{ store.selectedGroup.value }} Description
+              </h3>
+            </div>
+            <div class="row">
+              <div v-html="markdown(store.threatGroupData.description)"></div>
+            </div>
+          </template>
+          <div class="print-show-title">
             <h3 class="sectionTitle">MITRE ATT&amp;CK T-Numbers</h3>
             This section will list all the T-Numbers known to be used by the
             group {{ store.selectedGroup.name }} and associated detections
@@ -63,17 +96,31 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="tnum in Object.keys(store.threatGroupData.data[cat])">
-                    <tr v-for="(det, index) in store.threatGroupData.data[cat][tnum].detections">
+                  <template
+                    v-for="tnum in Object.keys(store.threatGroupData.data[cat])"
+                  >
+                    <tr
+                      v-for="(det, index) in store.threatGroupData.data[cat][
+                        tnum
+                      ].detections"
+                    >
                       <th
-                        :rowspan="store.threatGroupData.data[cat][tnum].detections.length"
+                        :rowspan="
+                          store.threatGroupData.data[cat][tnum].detections
+                            .length
+                        "
                         class="titleWidth"
                         v-if="index == 0"
-                      >{{ tnum }}</th>
+                      >
+                        {{ tnum }}
+                      </th>
                       <td>{{ det }}</td>
                     </tr>
                     <tr
-                      v-if="!store.threatGroupData.data[cat][tnum].detections.length && showempty"
+                      v-if="
+                        !store.threatGroupData.data[cat][tnum].detections
+                          .length && showempty
+                      "
                     >
                       <th>{{ tnum }}</th>
                       <td></td>
@@ -129,10 +176,7 @@
             <table class="table techniques" id="detections_table">
               <thead>
                 <tr>
-                  <th colspan="2">
-                    Detection
-                    {{ store.selectedGroup.value }}
-                  </th>
+                  <th class="detTitleWidth">Detections</th>
                 </tr>
               </thead>
               <template v-for="det in groupDetections">
@@ -157,18 +201,19 @@
           </div>
         </div>
       </template>
-      <template v-if="store.selectedGroup && store.threatGroupData.description">
+      <!-- <template v-if="store.selectedGroup && store.threatGroupData.description">
         <div class="pageBreak" />
         <div class="row">
-          <h3 class="sectionTitle">{{ store.selectedGroup.value }} Description</h3>
+          <h4 class="sectionTitle">
+            {{ store.selectedGroup.value }} Description
+          </h4>
         </div>
         <div class="row">
           <div v-html="markdown(store.threatGroupData.description)"></div>
         </div>
-      </template>
+      </template> -->
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -177,28 +222,32 @@ import { ref, reactive } from "vue";
 import { Print } from "../mixins/print.mjs";
 
 export default {
-  setup () {
+  setup() {
     return {
       store,
       showempty: ref(true),
-      showtnumdescriptions: ref(false),
-      showgroupdetections: ref(false),
+      showtnumdescriptions: ref(true),
+      showgroupdetections: ref(true),
       showgroupdetectionsteps: ref(false),
       options: ref([]),
       displaycat: reactive({}),
     };
   },
+
   mixins: [Print],
+
   methods: {
-    copy (s) {
+    copy(s) {
       let values = [...s];
       // console.log(values);
       navigator.clipboard.writeText(values.join(", "));
     },
+
     printDoc: function () {
       let content = document.getElementById("printArea").innerHTML;
       this.printDocument(content, this.store.selectedGroup.name);
     },
+
     filterFn: function (val, update) {
       if (val === "") {
         update(() => {

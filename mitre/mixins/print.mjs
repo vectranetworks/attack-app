@@ -12,7 +12,7 @@ export const Print = {
       var top = screen.height / 2 - 690 / 2;
       var mywindow = window.open(
         "",
-        "VSK Report",
+        "MITRE Report",
         "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=930, height=690, top=" +
           top +
           ", left=" +
@@ -22,7 +22,7 @@ export const Print = {
       let document = `
       <html>
         <head>
-          <title>Threat Group${title}</title>
+          <title>MITRE ${title}</title>
           <style>
             @media print {
               .titleLogo {

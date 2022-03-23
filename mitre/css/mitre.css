@@ -110,6 +110,10 @@ div.showempty {
 .titleWidth {
   width: 120px;
 }
+
+.detTitleWidth {
+  width: 340px;
+}
 .table th:last-child,
 .table td:last-child {
   border-right: none;
