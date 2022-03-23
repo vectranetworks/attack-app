@@ -103,14 +103,14 @@
             v-if="store.threatGroupData.loaded"
             v-for="cat in Object.keys(store.threatGroupData.data)"
           >
-            <div class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
-              <table
-                v-if="
-                  this.displaycat[cat] &&
-                  (this.showempty || detectionsCatNotEmpty([cat]))
-                "
-                class="table"
-              >
+            <div
+              v-if="
+                this.displaycat[cat] &&
+                (this.showempty || detectionsCatNotEmpty([cat]))
+              "
+              class="col col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12"
+            >
+              <table class="table">
                 <thead>
                   <tr>
                     <th colspan="2">{{ cat }}</th>
