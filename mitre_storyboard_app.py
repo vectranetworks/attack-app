@@ -1,11 +1,9 @@
 import logging
 import os
 import sys
-import argparse
 import json
+import re
 from datetime import datetime, timedelta
-import pprint
-
 import stix2
 
 try:
@@ -22,6 +20,8 @@ except Exception as error:
 LOG = logging.getLogger(__name__)
 ATTACK_DATA = 'enterprise-attack.json'
 VECTRA_TNUM = 'Vectra_Detections_to_Mitre_Technique_Map.json'
+VECTRA_TNUM_V10 = 'Vectra_platform_coverage_for_ATT&CK_v10.json'
+
 TNUMBER_DETECTION_MAP = {}
 MITRE_DESCRIPTIONS = 'mitre_descriptions3.json'
 SRC = stix2.MemoryStore
@@ -129,12 +129,12 @@ def extract_tnum(ap):
 
 def map_detection_technique(map_dict, t_number, product='all', category='all'):
     """
-    Maps Detections to T-number.
-    :param map_dict:
-    :param t_number:
+    Maps Detections to supplied T-number.
+    :param map_dict: Vectra supplied detection and T-number mapping file
+    :param t_number: Proper MITRE ATT&CK Tnumber
     :param product:
     :param category:
-    :return: Dictionary of detection to technique.  {Detection type: T-number}
+    :return: List of Vectra detections
     """
     det_list = list()
     LOG.info('Processing tnum: {}'.format(t_number))
@@ -151,6 +151,35 @@ def map_detection_technique(map_dict, t_number, product='all', category='all'):
             for cat in map_dict[prod].keys():
                 map_det_tnum(map_dict.get(prod).get(cat), t_number)
     return det_list
+
+
+def map_detection_technique2(map_dict, t_number):
+    """
+    Maps Detections to supplied T-number.  Use with MITRE v10+ JSON
+    :param map_dict: Vectra supplied detection and T-number mapping file
+    :param t_number: Proper MITRE ATT&CK T-number
+    :return: List of Vectra detections
+    """
+    pattern = r'^(.*)'
+    techniques = map_dict.get('techniques')
+    for t in techniques:
+        if t.get('techniqueID', '') == t_number:
+            comment = t.get('comment', '')
+            if len(comment):
+                dlist = re.split(pattern, comment, flags=re.MULTILINE)
+                if 'Example Alerts:' in dlist:
+                    d = dlist[dlist.index('Example Alerts:') + 1:-1]
+                    # remove \n
+                    return [i for i in d if '\n' not in i]
+                elif 'Relevant Detections:' in dlist:
+                    d = dlist[dlist.index('Relevant Detections:') + 1:-1]
+                    # remove \n
+                    return [i for i in d if '\n' not in i]
+            else:
+                logging.info('No comment found for T-number {}'.format(t_number))
+                return []
+    logging.info('T-number {} not found in mapping file'.format(t_number))
+    return []
 
 
 def load_tnum_descriptions(t_descr_file):
@@ -194,7 +223,7 @@ def map_detections_mitre_techniques(apl, map_dict, t_det_descriptions):
     for attack_pattern in apl:
         t_dict = dict()
         t_num = extract_tnum(attack_pattern)
-        det_list = list(set(map_detection_technique(map_dict, t_num)))
+        det_list = list(set(map_detection_technique2(map_dict, t_num)))
         tnum_descr = get_tnum_description(t_num, tnum_description_dict)
 
         # Loop through mitre phases
@@ -252,7 +281,7 @@ def first_load_mitre_data():
     global SRC, TNUMBER_DETECTION_MAP
     app.logger.info("Loading MITRE ATT&CK Data...")
     SRC = load_mitre_data(ATTACK_DATA)
-    TNUMBER_DETECTION_MAP = load_detection_technique_json(VECTRA_TNUM)
+    TNUMBER_DETECTION_MAP = load_detection_technique_json(VECTRA_TNUM_V10)
 
 
 @app.route('/')
@@ -386,7 +415,7 @@ def get_tnum_info(tnum=None):
     description = technique.get('description', '')
 
     # Get list of detections mapping to t_num
-    detections = map_detection_technique(TNUMBER_DETECTION_MAP, t_number)
+    detections = map_detection_technique2(TNUMBER_DETECTION_MAP, t_number)
 
     # Get list of groups utilizing t_num
     groups = list()
