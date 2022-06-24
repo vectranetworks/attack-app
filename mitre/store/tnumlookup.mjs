@@ -9,6 +9,7 @@ module.exports = reactive({
     description: "",
     name: "",
     tnum: "",
+    phase: "",
   },
 
   tnumDescription: "",
@@ -30,6 +31,7 @@ module.exports = reactive({
           description: fetchData.data.description,
           name: fetchData.data.name,
           tnum: fetchData.data.tnum,
+          phase: fetchData.data.phase,
           error: false,
         };
       } else {
@@ -42,6 +44,7 @@ module.exports = reactive({
           software: [],
           name: "",
           tnumn: "",
+          phase: "",
         };
       }
       // console.log(this.groupData);

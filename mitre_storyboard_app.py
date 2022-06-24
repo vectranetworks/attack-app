@@ -21,6 +21,7 @@ LOG = logging.getLogger(__name__)
 ATTACK_DATA = 'enterprise-attack.json'
 VECTRA_TNUM = 'Vectra_Detections_to_Mitre_Technique_Map.json'
 VECTRA_TNUM_V10 = 'Vectra_platform_coverage_for_ATT&CK_v10.json'
+VECTRA_TNUM_V11 = 'Vectra_platform_coverage_for_ATT&CK_v11.json'
 
 TNUMBER_DETECTION_MAP = {}
 MITRE_DESCRIPTIONS = 'mitre_descriptions3.json'
@@ -281,7 +282,7 @@ def first_load_mitre_data():
     global SRC, TNUMBER_DETECTION_MAP
     app.logger.info("Loading MITRE ATT&CK Data...")
     SRC = load_mitre_data(ATTACK_DATA)
-    TNUMBER_DETECTION_MAP = load_detection_technique_json(VECTRA_TNUM_V10)
+    TNUMBER_DETECTION_MAP = load_detection_technique_json(VECTRA_TNUM_V11)
 
 
 @app.route('/')
@@ -397,6 +398,14 @@ def get_malware_tool(software=None):
 
 @app.route('/api/get_tnum_info')
 def get_tnum_info(tnum=None):
+    """
+    Supplied a MITRE T-number, returns a JSON property containing ['description', 'detections', 'error', 'groups',
+    'phase', 'name', 'software', 'tnum']
+
+    :param tnum: MITRE T-number
+    :return : JSON property ['description', 'detections', 'error', 'groups', 'phase', 'name', 'software', 'tnum']
+    """
+
     t_number = request.args.get('tnum').upper()
 
     # Retrieve technique
@@ -413,6 +422,9 @@ def get_tnum_info(tnum=None):
     name = technique.get('name', '')
     # Get t_number name, description
     description = technique.get('description', '')
+
+    phase = technique.get('kill_chain_phases', '')[0]
+    phase = phase.get('phase_name', '')
 
     # Get list of detections mapping to t_num
     detections = map_detection_technique2(TNUMBER_DETECTION_MAP, t_number)
@@ -437,6 +449,7 @@ def get_tnum_info(tnum=None):
             "error": False,
             "tnum": t_number,
             "name": name,
+            "phase": phase,
             "description": description,
             "detections": detections,
             "groups": groups,

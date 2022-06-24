@@ -53,6 +53,18 @@
             </div>
           </template>
         </div>
+        <div class="row" v-if="store.tnumData.phase">
+          <template v-if="store.tnumData.phase">
+            <div class="row">
+              <h3 class="sectionTitle">
+                MITRE Phase:
+                <u>
+                  {{ toTitleCase(store.tnumData.phase) }}
+                </u>
+              </h3>
+            </div>
+          </template>
+        </div>
       </div>
       <!-- Groups using technique -->
       <div class="q-gutter-sm print-hidden" v-if="store.tnumData.loaded">
@@ -235,6 +247,20 @@ export default {
       let values = [...s];
       // console.log(values);
       navigator.clipboard.writeText(values.join(", "));
+    },
+
+    title(str) {
+      return str.replace(/(^|\s)\S/g, function (t) {
+        return t.toUpperCase();
+      });
+    },
+
+    toTitleCase: function (t) {
+      let newStr = t
+        .split("-")
+        .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
+        .join(" ");
+      return newStr;
     },
   },
 
