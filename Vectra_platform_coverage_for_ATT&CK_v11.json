@@ -2617,7 +2617,7 @@
 			"tactic": "credential-access",
 			"score": 3,
 			"color": "#31a354",
-			"comment": "Detects attackers attempting to force an MFA accept with a known password either successfully or during and attempt.\n\nAzure AD Suspicious Sign-on\nAzure AD Suspected Compromised Access\nAzure AD Suspicious Sign-on MFA-Failed\n",
+			"comment": "Detects attackers attempting to force an MFA accept with a known password either successfully or during and attempt.\n\nRelevant Detections:\nAzure AD Suspicious Sign-on\nAzure AD Suspected Compromised Access\nAzure AD Suspicious Sign-on MFA-Failed\n",
 			"enabled": true,
 			"metadata": [],
 			"links": [],
