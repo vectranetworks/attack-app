@@ -34,6 +34,14 @@
             <q-item-label>T-number Lookup</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item clickable v-ripple to="/extract">
+          <q-item-section avatar>
+            <q-icon color="grey" name="warning" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>T-number Extraction</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-scroll-area>
   </q-drawer>

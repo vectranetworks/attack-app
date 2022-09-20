@@ -336,6 +336,7 @@ export default {
   computed: {
     categories: function () {
       if (store.threatGroupData.data) {
+        console.log(store.threatGroupData);
         return Object.keys(store.threatGroupData.data);
       }
     },
