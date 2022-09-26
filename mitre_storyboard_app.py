@@ -460,6 +460,46 @@ def get_tnum_info(tnum=None):
     return response
 
 
+@app.route('/api/get_tnum_list_info')
+def get_tnum_list_info(tnum='zero'):
+    tnum_list = list(set(request.args.getlist('tnum')))
+    logging.info('Tnumber list: {}'.format(tnum_list))
+    # group_intrusion_set = get_group_by_alias(SRC, group)
+    tnum_data_list = []
+    # det_descriptions = load_tnum_descriptions(MITRE_DESCRIPTIONS)
+
+    for t_number in tnum_list:
+        t = t_number.split('.')[0].upper()
+        try:
+            technique = SRC.query([Filter("external_references.external_id", "=", t)])[0]
+        except IndexError:
+            logging.info('Tnumber {} not found'.format(t))
+            continue
+        tnum_data_list.append(
+            {
+                'tnum': t,
+                'name': technique.get('name', ''),
+                'description': technique.get('description', ''),
+                'phase': technique.get('kill_chain_phases', '')[0].get('phase_name', ''),
+                'detections': map_detection_technique2(TNUMBER_DETECTION_MAP, t)
+            }
+        )
+
+    ## group_apl = get_techniques_by_group_software(SRC, group_intrusion_set[0].get('id'))
+    # map_dict = load_detection_technique_json(VECTRA_TNUM)
+
+    # group_to_t_vectra_map = map_detections_mitre_techniques(group_apl, TNUMBER_DETECTION_MAP, det_descriptions)
+    # Add Group name, description
+    ## group_to_t_vectra_map['name'] = group
+    ## group_to_t_vectra_map['description'] = group_intrusion_set[0].get('description', '')
+
+    response = app.response_class(
+        response=json.dumps({'results': tnum_data_list}),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
 '''
 def main():
     set_logging('INFO')

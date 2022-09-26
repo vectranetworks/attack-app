@@ -2693,7 +2693,7 @@
 			"techniqueID": "T1048",
 			"tactic": "exfiltration",
 			"color": "#31a354",
-			"comment": "Detect exfiltration behavior over alternative protocol.\n\nRelevant Detections:\nSmash and Grab\nExternal Remote Access \nData Smuggler",
+			"comment": "Detect exfiltration behavior over alternative protocol.\n\nRelevant Detections:\nSmash and Grab\nExternal Remote Access\nData Smuggler",
 			"enabled": true,
 			"metadata": [],
 			"links": [],

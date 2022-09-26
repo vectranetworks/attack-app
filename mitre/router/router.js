@@ -28,6 +28,13 @@ const routes = [
       loadModule("views/Tnumlookup.vue", options)
     ),
   },
+  {
+    path: "/extract",
+    name: "T-number Extraction",
+    component: Vue.defineAsyncComponent(() =>
+      loadModule("views/Extract.vue", options)
+    ),
+  },
 ];
 
 // Define a new Router using VueRouter and assign the routes to it.
