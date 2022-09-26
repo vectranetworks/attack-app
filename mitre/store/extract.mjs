@@ -17,32 +17,32 @@ module.exports = reactive({
 
   groupDescription: "",
 
-  threatGroupData: {
-    error: false,
-    loaded: false,
-    data: {},
-    description: "",
-  },
+  // threatGroupData: {
+  //   error: false,
+  //   loaded: false,
+  //   data: {},
+  //   description: "",
+  // },
 
   selectedGroup: null,
 
   //Store Functions
   getTnumData: async function (tlist) {
-    console.log(tlist);
+    // console.log(tlist);
     let tlistParam = "";
     let first = true;
     for (let t of tlist) {
       if (first) {
         // first parameter
         first = false;
-        console.log(`tlistParam = ?tnum=${t}`);
+        // console.log(`tlistParam = ?tnum=${t}`);
         tlistParam = `?tnum=${t}`;
       } else {
         tlistParam = tlistParam + `&tnum=${t}`;
       }
     }
     try {
-      console.log(`fetching parameter ${tlistParam}`);
+      // console.log(`fetching parameter ${tlistParam}`);
       let fetchData = await axios({
         method: "get",
         url: `api/get_tnum_list_info${tlistParam}`,
@@ -92,7 +92,7 @@ module.exports = reactive({
 
   fetchThreatGroup: async function (group) {
     if (group) {
-      console.log(`fetchThreatGroup group ${group.name} selected`);
+      // console.log(`fetchThreatGroup group ${group.name} selected`);
       // Call an API endpoint
       try {
         let fetchData = await axios({

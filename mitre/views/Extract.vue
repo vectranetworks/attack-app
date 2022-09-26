@@ -46,7 +46,7 @@
           class="print-hidden"
           @click="printDoc()"
           label="Print Results"
-          v-if="store.selectedGroup"
+          v-if="store.tnumData.loaded"
           color="green"
         ></q-btn>
       </div>
@@ -73,6 +73,15 @@
       <div id="printArea" class="q-pa-md">
         <div class="row">
           <template v-if="tnumCategory">
+            <div class="print-show-title">
+              <h1 class="sectionTitle">Extracted Techniques</h1>
+              <h3 class="sectionTitle">MITRE ATT&amp;CK T-Numbers</h3>
+              This section will list all the T-Numbers extracted from the
+              supplied text and associated detections within Vectra Detect that
+              will monitor for activity seen tobe utilising the method.
+              <br />
+              <br />
+            </div>
             <div v-for="cat of Object.keys(tnumCategory)" :key="cat">
               <div
                 v-if="
@@ -120,7 +129,6 @@
             </div>
           </template>
         </div>
-      </div>
 
       <!-- Display T-number descriptions -->
       <div class="row" v-if="store.tnumData.loaded">
@@ -128,8 +136,7 @@
           <div class="pageBreak" />
           <div class="print-show-title">
             <h3 class="sectionTitle">MITRE ATT&amp;CK T-Number Descriptions</h3>
-            This section describes the MITRE Techniques known to be used by the
-            group.
+            This section describes the MITRE Techniques extracted from the supplied text.
             <br />
             <br />
           </div>
@@ -150,6 +157,45 @@
         </template>
       </div>
       <!-- Display Detections -->
+      <template v-if="showgroupdetections && store.tnumData.loaded">
+        <div class="pageBreak" />
+        <div class="print-show-title">
+          <h3 class="sectionTitle">Vectra Detect's Coverage of MITRE Techniques</h3>
+          This section describes the detections within Vectra Detect that are
+          known to trigger on techniques used by the supplied technique numbers.
+          <br />
+          <br />
+        </div>
+        <div class="row">
+          <div class="column">
+            <table class="table techniques" id="detections_table">
+              <thead>
+                <tr>
+                  <th class="detTitleWidth">Detections</th>
+                </tr>
+              </thead>
+              <template v-for="det in extractDetections">
+                <tr>
+                  <th class="titleWidth">{{ det }}</th>
+                  <template v-if="showgroupdetectionsteps">
+                    <td>{{ det }}</td>
+                  </template>
+                </tr>
+              </template>
+            </table>
+          </div>
+          <div class="q-pa-md q-gutter-sm print-hidden">
+            <q-btn
+              style="margin-top: 50px"
+              class="material-icons-outlined print-hidden"
+              @click="copy(extractDetections)"
+              icon="content_copy"
+            >
+              <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
+            </q-btn>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -179,7 +225,7 @@ export default {
         items[cat] = true;
       }
       this.displaycat = items;
-      console.log(`displaycat: ${JSON.stringify(this.displaycat)}`);
+      // console.log(`displaycat: ${JSON.stringify(this.displaycat)}`);
     },
 
     // inputText: function () {
@@ -201,7 +247,7 @@ export default {
 
     printDoc: function () {
       let content = document.getElementById("printArea").innerHTML;
-      this.printDocument(content, this.store.selectedGroup.name);
+      this.printDocument(content, "Extracted Techniques");
     },
 
     detectionsCatNotEmpty: function (category) {
@@ -271,16 +317,16 @@ export default {
       }
     },
 
-    categories: function () {
-      if (store.threatGroupData.data) {
-        return Object.keys(store.threatGroupData.data);
-      }
-    },
+    // categories: function () {
+    //   if (store.threatGroupData.data) {
+    //     return Object.keys(store.threatGroupData.data);
+    //   }
+    // },
 
     tnumCategory: function () {
       let tnumCategoryData = {};
       if (store.tnumData.loaded) {
-        console.log("tnumCategory store.tnumData.loaded");
+        // console.log("tnumCategory store.tnumData.loaded");
         for (let t of store.tnumData.results) {
           // Check to see if category key exists
           if (tnumCategoryData.hasOwnProperty(t.phase)) {
@@ -324,22 +370,37 @@ export default {
 
     extractDetections: function () {
       const DetectionData = new Set();
-      if (store.threatGroupData.loaded) {
-        for (let cat of Object.keys(store.threatGroupData.data)) {
-          for (let tnum of Object.keys(store.threatGroupData.data[cat])) {
-            if (store.threatGroupData.data[cat][tnum].detections) {
-              store.threatGroupData.data[cat][tnum].detections.forEach(
-                (element) => DetectionData.add(element)
-              );
-            }
+      if (store.tnumData.loaded) {
+        for (let item of store.tnumData.results) {
+          if (item.detections) {
+            item.detections.forEach((element) => DetectionData.add(element));
           }
         }
-        // console.log(groupDescriptionsData);
-        return DetectionData;
+        const uniqueArray = Array.from(DetectionData);
+        return uniqueArray.sort();
       } else {
         return DetectionData;
       }
     },
+
+    // extractDetections: function () {
+    //   const DetectionData = new Set();
+    //   if (store.threatGroupData.loaded) {
+    //     for (let cat of Object.keys(store.threatGroupData.data)) {
+    //       for (let tnum of Object.keys(store.threatGroupData.data[cat])) {
+    //         if (store.threatGroupData.data[cat][tnum].detections) {
+    //           store.threatGroupData.data[cat][tnum].detections.forEach(
+    //             (element) => DetectionData.add(element)
+    //           );
+    //         }
+    //       }
+    //     }
+    //     // console.log(groupDescriptionsData);
+    //     return DetectionData;
+    //   } else {
+    //     return DetectionData;
+    //   }
+    // },
 
     groups: function () {
       let items = [];
