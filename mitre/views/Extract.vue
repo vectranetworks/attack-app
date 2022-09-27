@@ -130,72 +130,79 @@
           </template>
         </div>
 
-      <!-- Display T-number descriptions -->
-      <div class="row" v-if="store.tnumData.loaded">
-        <template v-if="showtnumdescriptions">
-          <div class="pageBreak" />
-          <div class="print-show-title">
-            <h3 class="sectionTitle">MITRE ATT&amp;CK T-Number Descriptions</h3>
-            This section describes the MITRE Techniques extracted from the supplied text.
-            <br />
-            <br />
-          </div>
-          <table class="table techniques">
-            <thead>
-              <tr>
-                <th class="titleWidth">T-Number</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <template v-for="item in store.tnumData.results">
-              <tr>
-                <th class="titleWidth">{{ item.tnum }}</th>
-                <td><div v-html="markdown(item.description)"></div></td>
-              </tr>
-            </template>
-          </table>
-        </template>
-      </div>
-      <!-- Display Detections -->
-      <template v-if="showgroupdetections && store.tnumData.loaded">
-        <div class="pageBreak" />
-        <div class="print-show-title">
-          <h3 class="sectionTitle">Vectra Detect's Coverage of MITRE Techniques</h3>
-          This section describes the detections within Vectra Detect that are
-          known to trigger on techniques used by the supplied technique numbers.
-          <br />
-          <br />
-        </div>
-        <div class="row">
-          <div class="column">
-            <table class="table techniques" id="detections_table">
+        <!-- Display T-number descriptions -->
+        <div class="row" v-if="store.tnumData.loaded">
+          <template v-if="showtnumdescriptions">
+            <div class="pageBreak" />
+            <div class="print-show-title">
+              <h3 class="sectionTitle">
+                MITRE ATT&amp;CK T-Number Descriptions
+              </h3>
+              This section describes the MITRE Techniques extracted from the
+              supplied text.
+              <br />
+              <br />
+            </div>
+            <table class="table techniques">
               <thead>
                 <tr>
-                  <th class="detTitleWidth">Detections</th>
+                  <th class="titleWidth">T-Number</th>
+                  <th>Description</th>
                 </tr>
               </thead>
-              <template v-for="det in extractDetections">
+              <template v-for="item in store.tnumData.results">
                 <tr>
-                  <th class="titleWidth">{{ det }}</th>
-                  <template v-if="showgroupdetectionsteps">
-                    <td>{{ det }}</td>
-                  </template>
+                  <th class="titleWidth">{{ item.tnum }}</th>
+                  <td><div v-html="markdown(item.description)"></div></td>
                 </tr>
               </template>
             </table>
-          </div>
-          <div class="q-pa-md q-gutter-sm print-hidden">
-            <q-btn
-              style="margin-top: 50px"
-              class="material-icons-outlined print-hidden"
-              @click="copy(extractDetections)"
-              icon="content_copy"
-            >
-              <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
-            </q-btn>
-          </div>
+          </template>
         </div>
-      </template>
+        <!-- Display Detections -->
+        <template v-if="showgroupdetections && store.tnumData.loaded">
+          <div class="pageBreak" />
+          <div class="print-show-title">
+            <h3 class="sectionTitle">
+              Vectra Detect's Coverage of MITRE Techniques
+            </h3>
+            This section describes the detections within Vectra Detect that are
+            known to trigger on techniques used by the supplied technique
+            numbers.
+            <br />
+            <br />
+          </div>
+          <div class="row">
+            <div class="column">
+              <table class="table techniques" id="detections_table">
+                <thead>
+                  <tr>
+                    <th class="detTitleWidth">Detections</th>
+                  </tr>
+                </thead>
+                <template v-for="det in extractDetections">
+                  <tr>
+                    <th class="titleWidth">{{ det }}</th>
+                    <template v-if="showgroupdetectionsteps">
+                      <td>{{ det }}</td>
+                    </template>
+                  </tr>
+                </template>
+              </table>
+            </div>
+            <div class="q-pa-md q-gutter-sm print-hidden">
+              <q-btn
+                style="margin-top: 50px"
+                class="material-icons-outlined print-hidden"
+                @click="copy(extractDetections)"
+                icon="content_copy"
+              >
+                <q-tooltip class="bg-accent">Copy detection list</q-tooltip>
+              </q-btn>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -251,14 +258,14 @@ export default {
     },
 
     detectionsCatNotEmpty: function (category) {
-      console.log("detectionCatNotEmpty returning true");
-      return true;
-      // let detCount = 0;
-      // for (let tnum of Object.keys(tnumCategory[category])) {
-      //   detCount += tnumCategory[category][tnum].detections.length;
-      // }
-      // console.log(Boolean(detCount));
-      // return Boolean(detCount);
+      for (let tnum of store.tnumData.results) {
+        if (tnum.phase == category) {
+          if (tnum.detections.length > 0) {
+            return true;
+          }
+        }
+      }
+      return false;
     },
 
     filterFn: function (val, update) {
@@ -317,53 +324,24 @@ export default {
       }
     },
 
-    // categories: function () {
-    //   if (store.threatGroupData.data) {
-    //     return Object.keys(store.threatGroupData.data);
-    //   }
-    // },
-
     tnumCategory: function () {
       let tnumCategoryData = {};
       if (store.tnumData.loaded) {
-        // console.log("tnumCategory store.tnumData.loaded");
         for (let t of store.tnumData.results) {
-          // Check to see if category key exists
-          if (tnumCategoryData.hasOwnProperty(t.phase)) {
-            if (t.description) {
-              tnumCategoryData[t.phase] = {
-                [t.tnum]: {
-                  description: t.description,
-                  detections: t.detections,
-                },
-              };
-            } else {
-              tnumCategoryData[t.phase] = {
-                [t.tnum]: { detections: t.detections },
-              };
+          if (t.description) {
+            if (!tnumCategoryData[t.phase]) {
+              tnumCategoryData[t.phase] = {};
             }
-          } else if (t.description) {
-            //tnumCategoryData does not already have phase
-            tnumCategoryData[t.phase] = {
-              [t.tnum]: {
-                description: t.description,
-                detections: t.detections,
-              },
+            tnumCategoryData[t.phase][t.tnum] = {
+              description: t.description,
+              detections: t.detections,
             };
           } else {
-            tnumCategoryData[t.phase] = {
-              [t.tnum]: { detections: t.detections },
-            };
+            tnumCategoryData[t.phase][t.num] = { detections: t.detections };
           }
         }
-
-        // console.log(groupDescriptionsData);
-        //Sort numerically
-        // tnumCategoryData.sort((a, b) => (a.tnum < b.tnum ? -1 : 1));
-        // console.log(JSON.stringify(tnumCategoryData));
         return tnumCategoryData;
       } else {
-        // console.log(JSON.stringify(tnumCategoryData));
         return tnumCategoryData;
       }
     },
@@ -382,25 +360,6 @@ export default {
         return DetectionData;
       }
     },
-
-    // extractDetections: function () {
-    //   const DetectionData = new Set();
-    //   if (store.threatGroupData.loaded) {
-    //     for (let cat of Object.keys(store.threatGroupData.data)) {
-    //       for (let tnum of Object.keys(store.threatGroupData.data[cat])) {
-    //         if (store.threatGroupData.data[cat][tnum].detections) {
-    //           store.threatGroupData.data[cat][tnum].detections.forEach(
-    //             (element) => DetectionData.add(element)
-    //           );
-    //         }
-    //       }
-    //     }
-    //     // console.log(groupDescriptionsData);
-    //     return DetectionData;
-    //   } else {
-    //     return DetectionData;
-    //   }
-    // },
 
     groups: function () {
       let items = [];
